@@ -1,12 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Botti</title>
+ <title><%= content_for?(:title) ? yield(:title) : "Untitled" %> - ぼっち飯</title>
   <%= stylesheet_link_tag :all %>
   <%= javascript_include_tag :defaults %>
   <%= csrf_meta_tag %>
 </head>
 <body>
+<p class="notice"><%= notice %></p>
+<p class="alert"><%= alert %></p>
+
+<div id="user_nav">
+  <% if user_signed_in? %>
+    <%= link_to "Sign out", destroy_user_session_path %>  
+  <% else %>  
+    <%= link_to "twitter でログイン", "/auth/twitter" %>
+  <% end %>  
+</div>  
 
 <%= yield %>
 
