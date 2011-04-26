@@ -6,6 +6,7 @@ gem 'devise', '1.1.7'
 gem 'jquery-rails'
 gem 'omniauth'
 gem "nifty-generators", :group => :development
+gem 'twitter'
 
 group :development, :test do
   gem 'rspec-rails', "2.5.0"

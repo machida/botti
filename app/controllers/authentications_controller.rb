@@ -21,7 +21,10 @@ class AuthenticationsController < ApplicationController
       else
         flash[:notice] = "新規アカウント。ログインしました"
         user = User.new(:nickname=>oa['user_info']['nick_name'])
-        user.authentications.build(:provider=>oa['provider'], :uid=>oa['uid'])
+        user.authentications.build(:provider=>oa['provider'],
+                                   :uid=>oa['uid'],
+                                   :token=>oa['credentials']['token'],
+                                   :secret=>oa['credentials']['secret'])
         user.save!
         sign_in_and_redirect(:user, user)
       end

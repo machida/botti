@@ -1,5 +1,6 @@
 Botti::Application.routes.draw do
   get "welcome/about"
+  post "welcome/create"
 
   match '/auth/:provider/callback' => "authentications#create"
   resources :authentications, :only=>[:index, :destroy]

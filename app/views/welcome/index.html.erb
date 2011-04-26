@@ -1,2 +1,5 @@
-<h1>Welcome#index</h1>
-<p>Find me in app/views/welcome/index.html.erb</p>
+<%= form_tag(welcome_create_path, :method=>:post) do -%>
+  <%= label_tag "content", "内容" %>
+  <%= text_field_tag "content", params[:content], :size=>100 %>
+  <%= submit_tag "投稿" %>
+<% end -%>

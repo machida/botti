@@ -17,6 +17,10 @@ end
       'nickname'=>'s_tarou',
       'description' => 'This is TestAccount'
     },
+    'credentials' => {
+      'token' => 'TODO',
+      'secret' => 'TODO'
+    },
     'provider' => 'twitter'
   }
 end
@@ -29,3 +33,7 @@ end
 前提 /^ログアウト$/ do
   visit destroy_user_session_path
 end
+
+ならば /^"([^"]*)"と"([^"]*)"に投稿されていること$/ do |content, service|
+                         pending
+                       end
