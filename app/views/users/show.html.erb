@@ -1,0 +1,27 @@
+<%= render :partial=>"tweets/form" %>
+<div id="friends_status">
+<% if @friends -%>
+  友人のぼっち飯
+  <ul>
+  <% @friends.each do |t| -%>
+    <li class="tweet"><%= t.content %> @ <%= t.location.address if t.location %></li>
+  <% end -%>
+  </ul>
+<% else %>
+  友達がいません。
+<% end %>
+</div>
+<div id="my_status">
+<% if @tweets.count>0 -%>
+  最近のぼっち飯
+  <ul>
+  <% @tweets.each do |t| -%>
+    <li class="tweet"><%= t.content -%>
+      <span class="location">@ <%= t.location.address if t.location -%></span>
+      <span class="time">(<%= t.updated_at.strftime("%H:%M %d%b") %>)</span></li>
+  <% end -%>
+  </ul>
+<% else %>
+  最近はぼっち飯してません。
+<% end %>
+</div>

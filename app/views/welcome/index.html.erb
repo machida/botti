@@ -1,7 +1,2 @@
-<% if current_user -%>
-<%= form_tag(welcome_create_path, :method=>:post) do -%>
-  <%= label_tag "content", "内容" %>
-  <%= text_field_tag "content", params[:content] || "ぼっち飯なう", :size=>100 %>
-  <%= submit_tag "投稿" %>
-<% end -%>
+<% if true || current_user -%>
 <% end -%>

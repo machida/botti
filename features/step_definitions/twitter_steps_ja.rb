@@ -2,7 +2,7 @@
 require File.expand_path(File.join(File.dirname(__FILE__), "..", "support", "paths"))
 require File.expand_path(File.join(File.dirname(__FILE__), "..", "support", "selectors"))
 
-testuser_id = "123456"
+@last_post_text = ""
 
 前提 /^twitter アカウントを登録している/ do
   前提 %{twitter ログイン}
@@ -35,11 +35,11 @@ end
 end
 
 もし /^twitter 用字句生成/ do
-  s = "cucumber をもちいたテスト投稿#{Time.now}"
-  もし %{"内容"に"#{s}"と入力する}
+  @last_post_text = "cucumber をもちいたテスト投稿#{Time.now}"
+  もし %{"内容"に"#{@last_post_text}"と入力する}
 end
 
-ならば /^"([^"]*)"と"([^"]*)"に投稿されていること$/ do |content, service|
+ならば /^"([^"]*)"に投稿されていること$/ do |service|
   if service  == "twitter"
     Twitter.configure do |config|
       config.consumer_key = 'TODO'
@@ -47,6 +47,6 @@ end
       config.oauth_token = 'TODO'
       config.oauth_token_secret = 'TODO'
     end
-    Twitter.home_timeline[0].text.should be_include("cucumber をもちいたテスト投稿")
+    Twitter.home_timeline[0].text.should be_include(@last_post_text)
   end
 end

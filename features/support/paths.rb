@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 module NavigationHelpers
   # Maps a name to a path. Used by the
   #
@@ -12,6 +13,8 @@ module NavigationHelpers
       '/'
     when /the new twitter_login page/
       new_twitter_login_path
+    when /ユーザ/
+      user_path(User.first)
 
 
     # Add more mappings here.

@@ -18,7 +18,7 @@ end
 # end
 
 Authentication.blueprint do
-  provider "twitter"
+  provider "faker"
   uid
   token
   secret
@@ -26,6 +26,11 @@ end
 
 User.blueprint do
   authentications { [Authentication.make] }
+  email
+  nickname
+end
+
+User.blueprint(:login) do
   email
   nickname
 end

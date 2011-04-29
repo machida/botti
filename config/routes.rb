@@ -1,4 +1,9 @@
 Botti::Application.routes.draw do
+  get "users/show"
+
+  resources :tweets, :only=>[:new,:create]
+  resources :users, :only=>[:show]
+
   get "welcome/about"
   post "welcome/create"
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110426132344) do
+ActiveRecord::Schema.define(:version => 20110429113411) do
 
   create_table "authentications", :force => true do |t|
     t.integer  "user_id"
@@ -27,6 +27,14 @@ ActiveRecord::Schema.define(:version => 20110426132344) do
     t.decimal  "lng",        :precision => 15, :scale => 10
     t.float    "distance"
     t.string   "address"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "tweet_id"
+  end
+
+  create_table "tweets", :force => true do |t|
+    t.string   "content"
+    t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

@@ -32,4 +32,21 @@ describe Location do
       its(:last) { should == @l[1] }
     end
   end
+  describe "custom new" do
+    pending "How to do it? -- use my initialize and Geokit instead of rails one" do
+    it "should make new Location from LatLng object" do
+        l = Location.create!(Geokit::LatLng.normalize("35,135"))
+        l.lat.should == 35
+    end
+
+    it "should make new Location from String" do
+        l = Location.create!("35, 150")
+        l.lat.should == 35
+    end
+
+    it "should make new Location from Array" do
+      p Location.new([35,150])#.lat.should == 35
+    end
+   end
+  end
 end

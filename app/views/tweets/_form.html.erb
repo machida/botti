@@ -1,0 +1,13 @@
+<%= javascript_tag %Q%
+navigator.geolocation.getCurrentPosition(function(position){
+        $("#ll").val(position.coords.longitude+","+position.coords.latitude);
+      });
+% %>
+<%= form_for @tweet do |f| -%>
+  <%= f.hidden_field :user_id %>
+  <%= f.label :content, "内容" %>
+  <%= f.text_field :content, :size=>100 %><br />
+  <%= f.label :ll, "位置" %>
+  <%= f.text_field :ll, :size=>20 %><br />
+  <%= f.submit "投稿" %>
+<% end -%>
