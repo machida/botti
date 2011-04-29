@@ -34,6 +34,19 @@ end
   visit destroy_user_session_path
 end
 
+もし /^twitter 用字句生成/ do
+  s = "cucumber をもちいたテスト投稿#{Time.now}"
+  もし %{"内容"に"#{s}"と入力する}
+end
+
 ならば /^"([^"]*)"と"([^"]*)"に投稿されていること$/ do |content, service|
-                         pending
-                       end
+  if service  == "twitter"
+    Twitter.configure do |config|
+      config.consumer_key = 'TODO'
+      config.consumer_secret = 'TODO'
+      config.oauth_token = 'TODO'
+      config.oauth_token_secret = 'TODO'
+    end
+    Twitter.home_timeline[0].text.should be_include("cucumber をもちいたテスト投稿")
+  end
+end

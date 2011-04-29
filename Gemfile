@@ -7,6 +7,8 @@ gem 'jquery-rails'
 gem 'omniauth'
 gem "nifty-generators", :group => :development
 gem 'twitter'
+gem 'geokit'
+gem 'geokit-rails3', :git=>"https://github.com/sionide21/geokit-rails3.git"
 
 group :development, :test do
   gem 'rspec-rails', "2.5.0"

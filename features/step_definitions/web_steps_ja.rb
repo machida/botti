@@ -157,3 +157,6 @@ show_me_the_page = lambda { Then %{show me the page} }
 # backword-compat for old japanese translation.
 ならば /^デバッグ(?:のため)?$/, &show_me_the_page
 
+もし /^削除する$/ do
+  click_link "Destroy", :method=> :delete # for rails3
+end
