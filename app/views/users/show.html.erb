@@ -18,7 +18,7 @@
   <% @tweets.each do |t| -%>
     <li class="tweet"><%= t.content -%>
       <span class="location">@ <%= t.location.address if t.location -%></span>
-      <span class="time">(<%= t.updated_at.strftime("%H:%M %d%b") %>)</span></li>
+      <span class="time">(<%= t.updated_at.strftime("%H:%M %d %b") %>)</span></li>
   <% end -%>
   </ul>
 <% else %>

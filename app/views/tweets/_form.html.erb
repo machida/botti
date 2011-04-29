@@ -1,6 +1,6 @@
 <%= javascript_tag %Q%
 navigator.geolocation.getCurrentPosition(function(position){
-        $("#ll").val(position.coords.longitude+","+position.coords.latitude);
+        $("#tweet_ll").val(position.coords.latitude+","+position.coords.longitude);
       });
 % %>
 <%= form_for @tweet do |f| -%>
