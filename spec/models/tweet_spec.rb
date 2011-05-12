@@ -14,7 +14,7 @@ describe Tweet do
       its("ll") { should == "35.647401,139.716911" }
       its("location.lat") { should == 35.647401 }
       its("location.lng") { should == 139.716911 }
-      its("location.address") { should be_include "Shibuya" }
+      its("location.address") { should be_include "渋谷" }
     end
     context "without ll" do
       before do

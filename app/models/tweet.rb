@@ -8,9 +8,7 @@ class Tweet < ActiveRecord::Base
   def set_location
     unless ll.blank?
       obj = Geokit::LatLng.normalize(ll)
-      if self.location = Location.new(:lat=>obj.lat, :lng=>obj.lng)
-        self.location.address = Geokit::Geocoders::GoogleGeocoder.reverse_geocode(ll).full_address
-      end
+      self.location = Location.new(:lat=>obj.lat, :lng=>obj.lng)
       self.save
     end
   end

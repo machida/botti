@@ -35,22 +35,31 @@ describe Location do
   end
 
   describe "custom new" do
-    it "should make new Location from LatLng object" do
-        l = Location.create!(Geokit::LatLng.normalize("35,135"))
-        l.lat.should == 35
+    context "from LatLng object" do
+      subject { Location.create!(Geokit::LatLng.normalize("35,150")) }
+      its(:lat) { should == 35 }
+      its(:lng) { should == 150 }
     end
 
-    it "should make new Location from String" do
-        l = Location.create!("35, 150")
-        l.lat.should == 35
+    context "from String" do
+      subject { Location.create!("35,150") }
+      its(:lat) { should == 35 }
+      its(:lng) { should == 150 }
     end
 
-    it "should make new Location from Array" do
+    pending "from Array -- impossible" do
+      subject { Location.create!([35,150]) }
+      # this makes an array of two Location object(fail)
+      its(:lat) { should == 35 }
+      its(:lng) { should == 150 }
+    end
+
+    it "should new from Array" do
       Location.new([35,150]).lat.should == 35
     end
   end
 
-  describe "when loaded from database" do
+  context "when loaded from database" do
     before do
       Location.count.should == 0 ## gauntlet
       Location.create!("#{@lat}, #{@lng}")
@@ -60,5 +69,10 @@ describe Location do
     its(:count) {should == 1}
     its("first.lat") {should == BigDecimal(@lat.to_s)}
     its("first.lng") {should == BigDecimal(@lng.to_s)}
+  end
+
+  describe "Japanese reverse geocoding plugin" do
+    subject { Location.create!("#{@lat}, #{@lng}") }
+    its("address") { should be_include "駒場" }
   end
 end
