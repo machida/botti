@@ -39,5 +39,8 @@ module Botti
 
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:password]
+    unless ENV['CONSUMER_KEY']
+      require 'auth_info'
+    end
   end
 end

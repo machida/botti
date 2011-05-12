@@ -18,8 +18,8 @@ end
       'description' => 'This is TestAccount'
     },
     'credentials' => {
-      'token' => 'TODO',
-      'secret' => 'TODO'
+      'token' => ENV['USER_TOKEN'],
+      'secret' => ENV['USER_SECRET']
     },
     'provider' => 'twitter'
   }
@@ -39,13 +39,13 @@ end
   もし %{"内容"に"#{@last_post_text}"と入力する}
 end
 
-ならば /^"([^"]*)"に投稿されていること$/ do |service|
+ならば /^"([^"]*)"に投稿されていること$/ do |service| #"
   if service  == "twitter"
     Twitter.configure do |config|
-      config.consumer_key = 'TODO'
-      config.consumer_secret = 'TODO'
-      config.oauth_token = 'TODO'
-      config.oauth_token_secret = 'TODO'
+      config.consumer_key = ENV['CONSUMER_KEY']
+      config.consumer_secret = ENV['CONSUMER_SECRET']
+      config.oauth_token = ENV['USER_TOKEN']
+      config.oauth_token_secret = ENV['USER_SECRET']
     end
     Twitter.home_timeline[0].text.should be_include(@last_post_text)
   end

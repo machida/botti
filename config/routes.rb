@@ -10,7 +10,7 @@ Botti::Application.routes.draw do
   match '/auth/:provider/callback' => "authentications#create"
   resources :authentications, :only=>[:index, :destroy]
 
-  devise_for :users, :only=>[:create, :destroy]
+  devise_for :users, :only=>[:create, :destroy], :path => "accounts"
 
   # Sample resource route with options:
   #   resources :products do

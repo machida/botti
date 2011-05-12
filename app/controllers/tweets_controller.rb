@@ -13,8 +13,8 @@ class TweetsController < ApplicationController
       auth = current_user.authentications.find_by_provider("twitter")
       if auth
         Twitter.configure do |config|
-          config.consumer_key = 'bKudokCmGAhh3DRqkK9mQ'
-          config.consumer_secret = 'AjAgIVBpHZJE8vsfRfjLqO4JTu6OphOZxKCp1xslQ'
+          config.consumer_key = ENV['CONSUMER_KEY']
+          config.consumer_secret = ENV['CONSUMER_SECRET']
           ## get when user activates
           config.oauth_token = auth.token
           config.oauth_token_secret = auth.secret

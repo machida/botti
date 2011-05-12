@@ -3,6 +3,7 @@ require 'webrat'
 require 'webrat/core/matchers'
 require 'rspec'
 require 'rspec/rails'
+require 'auth_info'
 
 Webrat.configure do |config|
   config.mode = :rack
