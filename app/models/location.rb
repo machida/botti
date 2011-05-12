@@ -7,9 +7,7 @@ class Location < ActiveRecord::Base
   def initialize(args)
     begin
       ll = Geokit::LatLng.normalize(args)
-      p ll
-      self.lat = ll.lat; self.lng = ll.lng
-      self.save!
+      super(:lat=>ll.lat, :lng=>ll.lng)
     rescue
       super
     end

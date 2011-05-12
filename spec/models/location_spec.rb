@@ -6,6 +6,7 @@ describe Location do
     @lat = 35.65947338278833
     @lng = 139.6847677240835
   end
+
   describe "mapping" do
     before do
       @l = [Location.create!(:lat=>@lat, :lng=>@lng),
@@ -32,8 +33,8 @@ describe Location do
       its(:last) { should == @l[1] }
     end
   end
+
   describe "custom new" do
-    pending "How to do it? -- use my initialize and Geokit instead of rails one" do
     it "should make new Location from LatLng object" do
         l = Location.create!(Geokit::LatLng.normalize("35,135"))
         l.lat.should == 35
@@ -45,8 +46,19 @@ describe Location do
     end
 
     it "should make new Location from Array" do
-      p Location.new([35,150])#.lat.should == 35
+      Location.new([35,150]).lat.should == 35
     end
-   end
+  end
+
+  describe "when loaded from database" do
+    before do
+      Location.count.should == 0 ## gauntlet
+      Location.create!("#{@lat}, #{@lng}")
+    end
+
+    subject { Location.all }
+    its(:count) {should == 1}
+    its("first.lat") {should == BigDecimal(@lat.to_s)}
+    its("first.lng") {should == BigDecimal(@lng.to_s)}
   end
 end
