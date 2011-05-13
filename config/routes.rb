@@ -2,7 +2,7 @@ Botti::Application.routes.draw do
   get "users/show"
 
   resources :tweets, :only=>[:new,:create]
-  resources :users, :only=>[:show]
+  resources :users, :only=>[:show, :create]
 
   get "welcome/about"
   post "welcome/create"

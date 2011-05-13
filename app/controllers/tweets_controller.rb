@@ -9,7 +9,12 @@ class TweetsController < ApplicationController
     @tweet = Tweet.new(params[:tweet])
     @tweet.set_location
 
-    if @tweet.save
+    Tweet.transaction do
+      unless @tweet.save
+        flash[:warning] = "入力内容を確認してください。"
+        raise ActiveRecord::Rollback
+      end
+
       auth = current_user.authentications.find_by_provider("twitter")
       if auth
         Twitter.configure do |config|
@@ -19,14 +24,22 @@ class TweetsController < ApplicationController
           config.oauth_token = auth.token
           config.oauth_token_secret = auth.secret
         end
-        Twitter.update(@tweet.content)
-        temp_notice = "twitter に投稿しました。"
+        begin
+          Twitter.update(@tweet.content)
+        rescue Twitter::Forbidden
+          flash[:warning] = "投稿に失敗しました。次を確認してください。正しいアカウントを登録していますか? おなじ内容の投稿を繰替えしていませんか?"
+          raise ActiveRecord::Rollback
+        end
+        flash[:notice] = "twitter に投稿しました。"
       else
-        temp_notice = "関連づけられた twitter アカウントが見つかりませんでした。"
+        flash[:warning] = "関連づけられた twitter アカウントが見つかりませんでした。"
       end
-      redirect_to user_path(params[:tweet][:user_id]), :notice => "投稿成功" + temp_notice
+    end
+    if params[:tweet] && params[:tweet][:user_id]
+      redirect_to user_path(params[:tweet][:user_id])
     else
-      render :action => 'new'
+      flash[:warning] = "不正な投稿"
+      redirect_to root_path
     end
   end
 end

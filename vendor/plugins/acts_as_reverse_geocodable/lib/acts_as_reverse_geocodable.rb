@@ -1,4 +1,4 @@
-# -*- coding: undecided -*-
+# -*- coding: utf-8 -*-
 # ActsAsReverseGeocodable
 module ActiveRecord
 module Acts
@@ -14,7 +14,7 @@ module Acts
       url = "http://maps.googleapis.com/maps/api/geocode/json?latlng=#{self.lat},#{self.lng}&language=ja&sensor=false"
 
       res = ActiveRecord::Acts::ReverseGeocodable.get_response url
-      p address = ActiveRecord::Acts::ReverseGeocodable.get_address(res.body)
+      address = ActiveRecord::Acts::ReverseGeocodable.get_address(res.body)
 
       self.send("#{field}=", address)
     end
@@ -41,7 +41,7 @@ module Acts
     end
 
     def self.get_address(json)
-      p a = JSON.parse(json)
+      a = JSON.parse(json)
       begin
         # no need for a postal code
         if a["results"][0]["formatted_address"].include? "〒"
