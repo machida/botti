@@ -50,3 +50,15 @@ end
     Twitter.home_timeline[0].text.should be_include(@last_post_text)
   end
 end
+
+ならば /^"([^"]*)"に投稿されていないこと$/ do |service| #"
+  if service  == "twitter"
+    Twitter.configure do |config|
+      config.consumer_key = ENV['CONSUMER_KEY']
+      config.consumer_secret = ENV['CONSUMER_SECRET']
+      config.oauth_token = ENV['USER_TOKEN']
+      config.oauth_token_secret = ENV['USER_SECRET']
+    end
+    Twitter.home_timeline[0].text.should_not be_include(@last_post_text)
+  end
+end

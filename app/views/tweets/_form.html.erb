@@ -9,5 +9,7 @@ navigator.geolocation.getCurrentPosition(function(position){
   <%= f.text_field :content, :size=>100 %><br />
   <%= f.label :ll, "位置" %>
   <%= f.text_field :ll, :size=>20 %><br />
+  <%= f.label :ontwitter, "Twitter にもポストする" %>
+  <%= f.check_box "ontwitter" %>
   <%= f.submit "投稿" %>
 <% end -%>

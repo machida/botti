@@ -1,7 +1,7 @@
 class Tweet < ActiveRecord::Base
   has_one :location, :dependent=>:delete
   belongs_to :user
-  attr_accessor :ll
+  attr_accessor :ll, :ontwitter
   attr_accessible :content, :user_id, :ll
   validates_presence_of :content, :user_id
 

@@ -10,6 +10,7 @@ gem 'twitter'
 gem 'geokit'
 gem 'geokit-rails3', :git=>"https://github.com/sionide21/geokit-rails3.git"
 gem 'json'
+gem 'i18n_generators'
 
 group :development, :test do
   gem 'rspec-rails', "2.5.0"
@@ -21,6 +22,9 @@ group :development, :test do
   gem "ruby-debug"
   gem 'cucumber-rails'
   gem 'database_cleaner'
+  gem 'guard'
+  gem 'guard-rspec'
+  gem 'guard-cucumber'
 end
 # Deploy with Capistrano
 # gem 'capistrano'

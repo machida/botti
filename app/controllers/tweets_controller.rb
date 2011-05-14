@@ -9,37 +9,36 @@ class TweetsController < ApplicationController
     @tweet = Tweet.new(params[:tweet])
     @tweet.set_location
 
-    Tweet.transaction do
-      unless @tweet.save
-        flash[:warning] = "入力内容を確認してください。"
-        raise ActiveRecord::Rollback
-      end
+    if @tweet.save
+      flash[:notice] = "投稿しました。"
+    else
+      flash[:warning] = "入力内容を確認してください。"
+    end
 
+    if params[:tweet][:ontwitter] == "1"
       auth = current_user.authentications.find_by_provider("twitter")
       if auth
         Twitter.configure do |config|
           config.consumer_key = ENV['CONSUMER_KEY']
           config.consumer_secret = ENV['CONSUMER_SECRET']
-          ## get when user activates
           config.oauth_token = auth.token
           config.oauth_token_secret = auth.secret
         end
+
         begin
           Twitter.update(@tweet.content)
         rescue Twitter::Forbidden
-          flash[:warning] = "投稿に失敗しました。次を確認してください。正しいアカウントを登録していますか? おなじ内容の投稿を繰替えしていませんか?"
-          raise ActiveRecord::Rollback
+          flash[:warning] = "投稿に失敗しました。次を確認してください。正しいアカウントを登録していますか? おなじ内容の投稿をくりかえしていませんか?"
         end
-        flash[:notice] = "twitter に投稿しました。"
       else
         flash[:warning] = "関連づけられた twitter アカウントが見つかりませんでした。"
       end
     end
-    if params[:tweet] && params[:tweet][:user_id]
-      redirect_to user_path(params[:tweet][:user_id])
-    else
-      flash[:warning] = "不正な投稿"
-      redirect_to root_path
-    end
+      if params[:tweet] && params[:tweet][:user_id]
+        redirect_to user_path(params[:tweet][:user_id])
+      else
+        flash[:warning] = "不正な投稿"
+        redirect_to root_path
+      end
   end
 end
