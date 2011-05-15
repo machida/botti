@@ -3,8 +3,14 @@ var googlemap_controller = {
   mypos : null,
   friends: [],
   map: null,
-  setMyPosition : function(pos){ this.mypos = pos;
-                                 this.map.setCenter(pos); },
+  setMyPosition : function(pos){
+    this.mypos = pos;
+    this.map.setCenter(pos);
+
+    // position column of the form
+    console.log(pos);
+    window.document.getElementById("tweet_ll").value = pos.la+","+pos.Ja;
+  },
   setIcon : function(friend_info){
     var iw = new google.maps.InfoWindow({content: friend_info.message}),
         marker = new google.maps.Marker({

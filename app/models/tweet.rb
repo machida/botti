@@ -6,10 +6,8 @@ class Tweet < ActiveRecord::Base
   validates_presence_of :content, :user_id
 
   def set_location
-    unless ll.blank?
-      obj = Geokit::LatLng.normalize(ll)
-      self.location = Location.new(:lat=>obj.lat, :lng=>obj.lng)
-      self.save
-    end
+    obj = Geokit::LatLng.normalize(ll)
+    self.location = Location.create!(:lat=>obj.lat, :lng=>obj.lng)
+    self.save
   end
 end

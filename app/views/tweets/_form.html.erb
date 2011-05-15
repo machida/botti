@@ -1,8 +1,7 @@
 <%= javascript_tag %Q%
-navigator.geolocation.getCurrentPosition(function(position){
-        $("#tweet_ll").val(position.coords.latitude+","+position.coords.longitude);
-      });
+$("#new_tweet").submit(function(ev){console.log(googlemap_controller);})
 % %>
+
 <%= form_for @tweet do |f| -%>
   <%= f.hidden_field :user_id %>
   <%= f.label :content, "内容" %>

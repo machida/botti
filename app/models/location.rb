@@ -3,6 +3,7 @@ class Location < ActiveRecord::Base
   acts_as_mappable :default_units=>:kms, :default_formula=>:flat
   attr_accessible :lat, :lng
   acts_as_reverse_geocodable
+  validates_presence_of :lat, :lng
 
   private
   def initialize(args)

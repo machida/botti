@@ -15,6 +15,9 @@ class UsersController < ApplicationController
   def map
     @user = User.find(params[:id])
     @friend_tweets = get_friend_tweets(@user)
+    if @user.tweets.count > 0
+      @friend_tweets << @user.tweets.order("updated_at DESC").first
+    end
     @friend_tweets.each do |t|
       @js_query = generate_js_string(t.user, t)
     end

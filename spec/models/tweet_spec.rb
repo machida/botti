@@ -19,11 +19,9 @@ describe Tweet do
     context "without ll" do
       before do
         @t = Tweet.new(:content=>"Sample Tweet", :user_id=>1, :ll=>"")
-        @t.set_location
       end
 
-      subject {@t}
-      it { should be_valid }
+      it { lambda { @t.set_location }.should raise_error }
     end
   end
 end

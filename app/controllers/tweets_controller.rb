@@ -7,12 +7,12 @@ class TweetsController < ApplicationController
 
   def create
     @tweet = Tweet.new(params[:tweet])
-    @tweet.set_location
-
-    if @tweet.save
+    begin
+      @tweet.set_location
+      @tweet.save!
       flash[:notice] = "投稿しました。"
-    else
-      flash[:warning] = "入力内容を確認してください。"
+    rescue Geokit::Geocoders::GeocodeError, ActiveRecord::RecordInvalid
+      flash[:warning] = "入力内容を確認してください。(位置情報は有効になっていますか?)"
     end
 
     if params[:tweet][:ontwitter] == "1"
@@ -34,11 +34,11 @@ class TweetsController < ApplicationController
         flash[:warning] = "関連づけられた twitter アカウントが見つかりませんでした。"
       end
     end
-      if params[:tweet] && params[:tweet][:user_id]
-        redirect_to user_path(params[:tweet][:user_id])
-      else
-        flash[:warning] = "不正な投稿"
-        redirect_to root_path
-      end
+    if params[:tweet] && params[:tweet][:user_id]
+      redirect_to user_path(params[:tweet][:user_id])
+    else
+      flash[:warning] = "不正な投稿"
+      redirect_to root_path
+    end
   end
 end
