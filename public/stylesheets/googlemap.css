@@ -1,12 +1,6 @@
 #map_canvas {
-    bottom: 0;
-    height: auto;
-    left: 0;
-    position: absolute;
-    right: 0;
-    top: 0;
-}
-#map_canvas {
-    height: 400px;
-    width: 420px;
+    position:relative;
+    border: 1px solid black;
+    width:400px;
+    height:400px;
 }

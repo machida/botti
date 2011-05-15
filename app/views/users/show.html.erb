@@ -2,7 +2,7 @@
 <%= image_tag(@user.image_url, :alt=>"User Icon") %><%= @user.nickname %>
 <%= render :partial=>"tweets/form" %>
 <div id="map">
-  <iframe width="420" height="400" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="<%= map_user_path(@user) %>"></iframe>
+  <%= render :partial=>"map" %>
 </div>
 <div id="friends">
   <h3>ぼっち飯 を使っている友人</h3>
@@ -16,7 +16,7 @@
 </div>
 <div id="friends_status">
 <% if @user.friends.count > 0 -%>
-  友人のぼっち飯
+  友人達のぼっち飯
   <ul>
   <% @friend_tweets.each do |t| -%>
     <li class="tweet">

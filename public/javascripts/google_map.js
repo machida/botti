@@ -9,7 +9,7 @@ var googlemap_controller = {
 
     // position column of the form
     console.log(pos);
-    window.document.getElementById("tweet_ll").value = pos.la+","+pos.Ja;
+    window.document.getElementById("tweet_ll").value = pos.Ia+","+pos.Ja;
   },
   setIcon : function(friend_info){
     var iw = new google.maps.InfoWindow({content: friend_info.message}),
@@ -70,7 +70,8 @@ googlemap_controller.initialize = function() {
   }
 };
 
-
 googlemap_controller.addFriend = function(friend_info){
   this.friends.push(friend_info);
 };
+
+$(document).ready(function(){googlemap_controller.initialize();});
