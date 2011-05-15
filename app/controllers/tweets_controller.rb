@@ -12,7 +12,7 @@ class TweetsController < ApplicationController
       @tweet.save!
       flash[:notice] = "投稿しました。"
     rescue Geokit::Geocoders::GeocodeError, ActiveRecord::RecordInvalid
-      flash[:warning] = "入力内容を確認してください。(位置情報は有効になっていますか?)"
+      flash[:alert] = "入力内容を確認してください。(位置情報は有効になっていますか?)"
     end
 
     if params[:tweet][:ontwitter] == "1"
@@ -28,16 +28,16 @@ class TweetsController < ApplicationController
         begin
           Twitter.update(@tweet.content)
         rescue Twitter::Forbidden
-          flash[:warning] = "投稿に失敗しました。次を確認してください。正しいアカウントを登録していますか? おなじ内容の投稿をくりかえしていませんか?"
+          flash[:alert] = "投稿に失敗しました。次を確認してください。正しいアカウントを登録していますか? おなじ内容の投稿をくりかえしていませんか?"
         end
       else
-        flash[:warning] = "関連づけられた twitter アカウントが見つかりませんでした。"
+        flash[:alert] = "関連づけられた twitter アカウントが見つかりませんでした。"
       end
     end
     if params[:tweet] && params[:tweet][:user_id]
       redirect_to user_path(params[:tweet][:user_id])
     else
-      flash[:warning] = "不正な投稿"
+      flash[:alert] = "不正な投稿"
       redirect_to root_path
     end
   end

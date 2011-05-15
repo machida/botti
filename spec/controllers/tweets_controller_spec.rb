@@ -25,7 +25,7 @@ describe TweetsController do
         post :create, :tweet=>{:ontwitter => '0'}
       end
       it { response.should redirect_to root_path }
-      it { flash[:warning].should contain "不正な投稿" }
+      it { flash[:alert].should contain "不正な投稿" }
     end
 
     context "when the model is invalid" do
@@ -37,7 +37,7 @@ describe TweetsController do
         post :create, :tweet=>{:user_id => @u.id}
       end
       it { response.should redirect_to @u}
-      it { flash[:warning].should contain "入力内容を確認してください。" }
+      it { flash[:alert].should contain "入力内容を確認してください。" }
       after do
         Tweet.any_instance.stubs(:valid?).returns(true)
       end
@@ -51,7 +51,7 @@ describe TweetsController do
         post :create, :tweet=>{:user_id =>@u.id}
       end
       it { response.should redirect_to @u}
-      it { flash[:warning].should contain "入力内容を確認してください。" }
+      it { flash[:alert].should contain "入力内容を確認してください。" }
     end
   end
 
@@ -69,7 +69,7 @@ describe TweetsController do
       post :create, :tweet=>{:user_id=>@u.id, :ontwitter=>"1"}
     end
     it { flash[:notice].should contain "投稿しました。" }
-    it { flash[:warning].should contain "おなじ内容の投稿をくりかえしていませんか?"}
+    it { flash[:alert].should contain "おなじ内容の投稿をくりかえしていませんか?"}
     it { response.should redirect_to @u }
   end
 
@@ -86,7 +86,7 @@ describe TweetsController do
       post :create, :tweet=>{:user_id=>@u.id, :ontwitter=>"0"}
     end
     it { flash[:notice].should contain "投稿しました。" }
-    it { flash[:warning].should be_nil}
+    it { flash[:alert].should be_nil}
     it { response.should redirect_to @u }
   end
 end

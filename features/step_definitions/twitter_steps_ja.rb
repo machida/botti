@@ -33,6 +33,7 @@ end
 もし /^twitter 用字句生成/ do
   @last_post_text = "cucumber をもちいたテスト投稿#{Time.now}"
   もし %{"内容"に"#{@last_post_text}"と入力する}
+  もし %{"位置"に"34.3664951,-89.5192484"と入力する}
 end
 
 ならば /^"([^"]*)"に投稿されていること$/ do |service| #"
