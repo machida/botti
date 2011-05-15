@@ -14,5 +14,5 @@ class User < ActiveRecord::Base
   attr_accessible :email, :password, :password_confirmation, :remember_me,
   :nickname, :image_url
 
-  varidates_presence_of :nickname, :image_url
+  validates_presence_of :nickname, :image_url
 end

@@ -9,6 +9,7 @@ Sham.define do
   token { rand(100000).to_s + "-" + rand(100000).to_s }
   secret { rand(100000).to_s }
   email { Faker::Internet.email }
+  url { "http://www.example.com/" + Faker::Internet.user_name + ".png" }
 end
 
 # Room.blueprint do
@@ -28,6 +29,7 @@ User.blueprint do
   authentications { [Authentication.make] }
   email
   nickname
+  image_url { Sham.url }
 end
 
 User.blueprint(:login) do
