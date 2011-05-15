@@ -2,7 +2,7 @@ source 'http://rubygems.org'
 
 gem 'rails', '3.0.3'
 gem 'sqlite3'
-gem 'devise', '1.1.7'
+gem 'devise'
 gem 'jquery-rails'
 gem 'omniauth'
 gem "nifty-generators", :group => :development
