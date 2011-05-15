@@ -7,6 +7,9 @@ class AuthenticationsController < ApplicationController
 
   def create
     oa = request.env["omniauth.auth"]
+    Twitter.friend_ids(oa['user_info']['nickname'])["ids"].each do |id|
+      p id
+    end
     authentication = Authentication.
       find_by_provider_and_uid(oa['provider'], oa['uid'])
     if authentication
