@@ -24,6 +24,14 @@ module Rack
 end
 
 Before do
+Fixtures.reset_cache
+  %w[tweets users authentications].each do |name|
+    Fixtures.create_fixtures("db/fixtures/cucumber",name)
+  end
+end
+
+
+Before do
   OmniAuth.config.test_mode = true # short circuit
 end
 

@@ -1,14 +1,28 @@
-<%= image_tag(@user.image_url || "rails.png", :alt=>"User Icon") %><%= @user.nickname %>
+<% title "マイページ" %>
+<%= image_tag(@user.image_url, :alt=>"User Icon") %><%= @user.nickname %>
 <%= render :partial=>"tweets/form" %>
 <div id="map">
   <iframe width="420" height="400" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="<%= map_user_path(@user) %>"></iframe>
 </div>
+<div id="friends">
+  <h3>ぼっち飯 を使っている友人</h3>
+  <ul>
+  <% @user.friends.each do |f| -%>
+    <li><%= image_tag(f.image_url, :alt=>"Friend Icon") %> <%= f.nickname %></li>
+  <% end -%>
+  <li>フォロワーにおすすめしましょう</li>
+  </ul>
+  
+</div>
 <div id="friends_status">
-<% if @friends -%>
+<% if @user.friends.count > 0 -%>
   友人のぼっち飯
   <ul>
-  <% @friends.each do |t| -%>
-    <li class="tweet"><%= t.content %> @ <%= t.location.address if t.location %></li>
+  <% @friend_tweets.each do |t| -%>
+    <li class="tweet">
+      <%= t.user.nickname %> : <%= t.content %>
+      <span class="location">@ <%= t.location.address if t.location -%></span>
+      <span class="time">(<%= t.updated_at.strftime("%H:%M %d %b") %>)</span></li>
   <% end -%>
   </ul>
 <% else %>

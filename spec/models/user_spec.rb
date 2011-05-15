@@ -14,31 +14,18 @@ describe User do
 
   describe "update_info" do
     before do
-      @url = "http://example.com/pseudo.png"
-      @oa_sample = {
-        'uid' => '123456',
-        'user_info' => {
-          'name'=>'Botti Testkun',
-          'nickname'=>'bottitester',
-          'description' => 'This is TestAccount',
-          'image' => @url
-        },
-        'credentials' => {
-          'token' => ENV['USER_TOKEN'],
-          'secret' => ENV['USER_SECRET']
-        },
-        'provider' => 'twitter'
-      }
+      @oa_sample = TEST_OAINFO
     end
 
     context "when image is refreshed" do
       before do
         @u = User.make
-        @u.image_url.should_not == @url # gauntlet
+        @u.image_url.should_not == TEST_OAINFO['user_info']['image'] # gauntlet
         @u.update_info(@oa_sample)
       end
       subject{@u}
-      its(:image_url) { should == @url }
+      its(:nickname) { should == TEST_OAINFO['user_info']['nickname'] }
+      its(:image_url) { should == TEST_OAINFO['user_info']['image'] }
     end
 
     describe "loading friend" do

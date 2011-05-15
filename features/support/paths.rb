@@ -14,15 +14,7 @@ module NavigationHelpers
     when /the new twitter_login page/
       new_twitter_login_path
     when /ユーザ/
-      user_path(User.first)
-
-
-    # Add more mappings here.
-    # Here is an example that pulls values out of the Regexp:
-    #
-    #   when /^(.*)'s profile page$/i
-    #     user_profile_path(User.find_by_login($1))
-
+      user_path(User.find_by_nickname(TEST_OAINFO['user_info']['nickname']))
     else
       begin
         page_name =~ /the (.*) page/

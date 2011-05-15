@@ -10,20 +10,7 @@ require File.expand_path(File.join(File.dirname(__FILE__), "..", "support", "sel
 end
 
 前提 /^twitter ログイン準備$/ do
-  OmniAuth.config.mock_auth[:twitter] = {
-    'uid' => '123456',
-    'user_info' => {
-      'name'=>'Botti Testkun',
-      'nickname'=>'bottitester',
-      'description' => 'This is TestAccount',
-      'image' => 'http://example.com/sample_image1.png'
-    },
-    'credentials' => {
-      'token' => ENV['USER_TOKEN'],
-      'secret' => ENV['USER_SECRET']
-    },
-    'provider' => 'twitter'
-  }
+  OmniAuth.config.mock_auth[:twitter] = TEST_OAINFO
 end
 
 前提 /^twitter ログイン$/ do
