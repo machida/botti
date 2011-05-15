@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 class User < ActiveRecord::Base
   has_many :authentications, :dependent=>:destroy
   has_many :tweets, :dependent=>:destroy
@@ -10,5 +11,8 @@ class User < ActiveRecord::Base
 
   # Setup accessible (or protected) attributes for your model
   # :email, :password, :password_confirmation, :remember_me
-  attr_accessible :email, :password, :password_confirmation, :remember_me
+  attr_accessible :email, :password, :password_confirmation, :remember_me,
+  :nickname, :image_url
+
+  varidates_presence_of :nickname, :image_url
 end

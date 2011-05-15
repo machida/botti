@@ -15,7 +15,8 @@ end
     'user_info' => {
       'name'=>'Shiken Tarou',
       'nickname'=>'s_tarou',
-      'description' => 'This is TestAccount'
+      'description' => 'This is TestAccount',
+      'image' => 'http://example.com/sample_image1.png'
     },
     'credentials' => {
       'token' => ENV['USER_TOKEN'],
@@ -27,6 +28,13 @@ end
 
 前提 /^twitter ログイン$/ do
   前提 %{twitter ログイン準備}
+  visit '/auth/twitter'
+end
+
+もし /^情報を変更してログイン$/ do
+  前提 %{twitter ログイン準備}
+  OmniAuth.config.mock_auth[:twitter]["user_info"]["image"] =
+    'http://example.com/sample_image2.png'
   visit '/auth/twitter'
 end
 
@@ -61,4 +69,8 @@ end
     end
     Twitter.home_timeline[0].text.should_not be_include(@last_post_text)
   end
+end
+
+ならば /^(\d+)のサンプルアイコンが表示されていること$/ do |count|
+  response.should have_selector "img[src='http://example.com/sample_image#{count}.png']"
 end

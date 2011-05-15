@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 class AuthenticationsController < ApplicationController
   before_filter :authenticate_user!, :only=>[:index, :destroy]
   def index
@@ -10,6 +11,8 @@ class AuthenticationsController < ApplicationController
       find_by_provider_and_uid(oa['provider'], oa['uid'])
     if authentication
       flash[:notice] = "既存アカウント。ログインしました"
+      authentication.user.update_attribute( :image_url,
+                                 oa['user_info']['image'])
       sign_in_and_redirect(:user, authentication.user)
       return
     else
@@ -20,11 +23,12 @@ class AuthenticationsController < ApplicationController
         return
       else
         flash[:notice] = "新規アカウント。ログインしました"
-        user = User.new(:nickname=>oa['user_info']['nick_name'])
+        user = User.new(:nickname=>oa['user_info']['nickname'],
+                    :image_url=>oa['user_info']['image'])
         user.authentications.build(:provider=>oa['provider'],
-                                   :uid=>oa['uid'],
-                                   :token=>oa['credentials']['token'],
-                                   :secret=>oa['credentials']['secret'])
+                             :uid=>oa['uid'],
+                             :token=>oa['credentials']['token'],
+                             :secret=>oa['credentials']['secret'])
         user.save!
         sign_in_and_redirect(:user, user)
       end
