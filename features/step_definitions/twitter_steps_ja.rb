@@ -13,8 +13,8 @@ end
   OmniAuth.config.mock_auth[:twitter] = {
     'uid' => '123456',
     'user_info' => {
-      'name'=>'Shiken Tarou',
-      'nickname'=>'s_tarou',
+      'name'=>'Botti Testkun',
+      'nickname'=>'bottitester',
       'description' => 'This is TestAccount',
       'image' => 'http://example.com/sample_image1.png'
     },
@@ -35,6 +35,7 @@ end
   前提 %{twitter ログイン準備}
   OmniAuth.config.mock_auth[:twitter]["user_info"]["image"] =
     'http://example.com/sample_image2.png'
+  OmniAuth.config.mock_auth[:twitter]["user_info"]["nickname"] = "tomy_kaira"
   visit '/auth/twitter'
 end
 
