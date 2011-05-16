@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 class Tweet < ActiveRecord::Base
   has_one :location, :dependent=>:delete
   belongs_to :user
@@ -10,5 +11,9 @@ class Tweet < ActiveRecord::Base
     obj = Geokit::LatLng.normalize(ll)
     self.location = Location.create!(:lat=>obj.lat, :lng=>obj.lng)
     self.save
+  end
+
+  def time
+    updated_at.in_time_zone("Tokyo").strftime("%H:%M %d日")
   end
 end

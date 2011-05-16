@@ -2,9 +2,8 @@
 <%= form_for @tweet do |f| -%>
   <%= f.hidden_field :user_id %>
   <%= f.label :content, "内容" %>
-  <%= f.text_field :content, :size=>50 %><br />
-  <%= f.label :ll, "位置" %>
-  <%= f.text_field :ll, :size=>20 %><br />
+  <%= f.text_field :content, :size=>50 %>
+  <%= f.hidden_field :ll, :size=>20, :value=>"" %><br />
   <%= f.label :ontwitter, "Twitter にもポストする" %>
   <%= f.check_box "ontwitter" %>
   <%= f.submit "投稿" %>

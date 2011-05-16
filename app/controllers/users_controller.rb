@@ -28,7 +28,7 @@ class UsersController < ApplicationController
 pos:new google.maps.LatLng(#{tweet.location.lat},#{tweet.location.lng}),
 name: "#{user.nickname}",
 image_url: "#{user.image_url || "/images/rails.png"}",
-message: "#{user.nickname}: #{tweet.content} (#{tweet.updated_at.strftime("%H:%M %d日")})"
+message: "#{user.nickname}: #{tweet.content} (#{tweet.time})"
 }
 );%
   end
