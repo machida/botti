@@ -5,7 +5,6 @@ class AuthenticationsController < ApplicationController
     oa = request.env["omniauth.auth"]
 
     # closed beta filter
-    require "auth_info" unless ENV['CLOSE_FILTER'] == "false"
     unless ENV['CLOSE_FILTER'] == "false"
       require "filter"
       unless WHITELIST.include? oa['user_info']['nickname']
