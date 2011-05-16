@@ -10,10 +10,14 @@ class Tweet < ActiveRecord::Base
   def set_location
     obj = Geokit::LatLng.normalize(ll)
     self.location = Location.create!(:lat=>obj.lat, :lng=>obj.lng)
-    self.save
+    self.save!
   end
 
   def time
     updated_at.in_time_zone("Tokyo").strftime("%H:%M %d日")
+  end
+
+  def self.remove_old_tweets
+    self.delete_all(["updated_at < ?", 3.days.ago])
   end
 end

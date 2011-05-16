@@ -32,4 +32,17 @@ describe Tweet do
     end
     it { @t.time.should == "18:15 16日" }
   end
+
+  describe "remove old tweets" do
+    before do
+      Tweet.any_instance.stubs(:valid?).returns(true)
+      Tweet.class_eval { attr_accessible :updated_at }
+      Tweet.create!(:updated_at=>4.days.ago)
+      Tweet.create!(:updated_at=>2.days.ago)
+      Tweet.create!(:updated_at=>1.days.ago)
+      Tweet.all.count.should == 3 #gauntlet
+      Tweet.remove_old_tweets
+    end
+    it { Tweet.all.count.should == 2 }
+  end
 end
