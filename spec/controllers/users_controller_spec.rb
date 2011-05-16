@@ -15,12 +15,4 @@ describe UsersController do
       response.should redirect_to @u
     end
   end
-
-  describe "GET 'map'" do
-    it "should be rendered only with map.html" do
-      get "map", :id=>@u.id
-      response.should render_template "users/map"
-      response.should_not render_template "layouts/application"
-    end
-  end
 end
