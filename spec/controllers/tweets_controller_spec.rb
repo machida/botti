@@ -11,11 +11,6 @@ describe TweetsController do
     @mock_tweet ||= mock_model(Tweet, stubs)
   end
 
-  it "new action should render new template" do
-    get :new
-    response.should render_template(:new)
-  end
-
   context "when the post is invalid" do
     context "when the query is send not from a form" do
       before do
