@@ -33,3 +33,16 @@ div#cb_notice {
     border: 2px solid #ffbbbb;
     padding: 10px 10px;
 }
+p.alert {
+    border: 1px solid #ffbbbb;
+    padding: 5px;
+    color: #cc0000;
+}
+p.notice {
+    border: 1px solid #cccccc;
+    padding: 5px;
+    color: #666666;
+}
+h2, h3{
+    color: #333333;
+}
