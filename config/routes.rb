@@ -5,6 +5,7 @@ Botti::Application.routes.draw do
   resources :users, :only=>[:show]
 
   match '/auth/:provider/callback' => "authentications#create"
+  match '/auth/failure' => "welcome#failure"
 
   devise_for :users, :path => "accounts"
 
