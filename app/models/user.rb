@@ -18,12 +18,15 @@ class User < ActiveRecord::Base
 
   validates_presence_of :nickname, :image_url
 
+  # TODO: maybe too heavy
   def update_info(oa)
     update_attribute(:nickname,oa['user_info']['nickname'])
     update_attribute(:image_url,oa['user_info']['image'])
     Twitter.friend_ids(oa['user_info']['nickname'])["ids"].each do |id|
       if auth = Authentication.find_by_provider_and_uid(oa['provider'], id)
-        friends << auth.user
+        unless friends.include? auth.user
+          friends << auth.user
+        end
       end
     end
   end

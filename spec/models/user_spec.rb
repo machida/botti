@@ -43,11 +43,7 @@ describe User do
       it { @botti.connections.count.should == 1 }
 
       context "when I login twice" do
-        before do
-          @botti = User.make
-          @botti.update_info(@oa_sample)
-        end
-
+        before { @botti.update_info(@oa_sample) }
         it { @botti.connections.count.should == 1}
       end
     end
