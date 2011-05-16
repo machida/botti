@@ -14,3 +14,17 @@ div#wrapper {
 body {
     background-color: #eeffee;
 }
+div#image_wrapper {
+    width: 48px;
+    padding: 0 10px;
+    height: 60px;
+}
+div.left {
+    float: left;
+}
+div#map {
+    clear:left;
+}
+div#content {
+    margin: 0px 20px;
+}

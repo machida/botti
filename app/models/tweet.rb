@@ -4,6 +4,7 @@ class Tweet < ActiveRecord::Base
   attr_accessor :ll, :ontwitter
   attr_accessible :content, :user_id, :ll
   validates_presence_of :content, :user_id
+  validates_length_of :content, :maximum => 140
 
   def set_location
     obj = Geokit::LatLng.normalize(ll)

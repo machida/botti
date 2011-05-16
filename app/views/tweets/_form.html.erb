@@ -1,14 +1,20 @@
-<%= javascript_tag %Q%
-$("#new_tweet").submit(function(ev){console.log(googlemap_controller);})
-% %>
-
+<div id="form_wrapper" class="left">
 <%= form_for @tweet do |f| -%>
   <%= f.hidden_field :user_id %>
   <%= f.label :content, "内容" %>
-  <%= f.text_field :content, :size=>100 %><br />
+  <%= f.text_field :content, :size=>50 %><br />
   <%= f.label :ll, "位置" %>
   <%= f.text_field :ll, :size=>20 %><br />
   <%= f.label :ontwitter, "Twitter にもポストする" %>
   <%= f.check_box "ontwitter" %>
   <%= f.submit "投稿" %>
 <% end -%>
+</div> 
+<%= javascript_tag %Q%
+$(function(){
+$("#new_tweet").submit(function(ev){
+var pos = googlemap_controller.mypos;
+window.document.getElementById("tweet_ll").value = pos.Ia+","+pos.Ja;
+})
+});
+% %>
