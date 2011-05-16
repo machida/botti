@@ -23,9 +23,6 @@ class TweetsController < ApplicationController
           config.consumer_secret = ENV['CONSUMER_SECRET']
           config.oauth_token = auth.token
           config.oauth_token_secret = auth.secret
-          if ENV['APIGEE_TWITTER_API_ENDPOINT']
-            p config.endpoint = "http://" + ENV['APIGEE_TWITTER_API_ENDPOINT']
-          end
         end
 
         begin
