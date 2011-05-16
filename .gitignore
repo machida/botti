@@ -5,3 +5,4 @@ tmp/
 coverage/
 config/database.yml
 auth_info.rb
+filter.rb

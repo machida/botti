@@ -6,10 +6,10 @@ span#user_nav {
     padding-right: 30px;
 }
 div#wrapper {
-    backgournd-color: #000;
     margin: 0 auto;
     width: 640px;
     border: 0px 1px solid black;
+    font:15px arial,sans-serif;
 }
 body {
     background-color: #eeffee;
@@ -27,4 +27,9 @@ div#map {
 }
 div#content {
     margin: 0px 20px;
+}
+div#cb_notice {
+    background-color: #ffeeee;
+    border: 2px solid #ffbbbb;
+    padding: 10px 10px;
 }
