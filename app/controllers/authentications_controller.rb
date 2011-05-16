@@ -3,6 +3,20 @@ class AuthenticationsController < ApplicationController
   before_filter :authenticate_user!, :only=>[:index, :destroy]
   def create
     oa = request.env["omniauth.auth"]
+
+    # closed beta filter
+    require "auth_info" unless ENV['CLOSE_FILTER'] == "false"
+    p ENV['CLOSE_FILTER']
+    unless ENV['CLOSE_FILTER'] == "false"
+      p ENV['CLOSE_FILTER']
+      require "filter"
+      p WHITELIST
+      unless WHITELIST.include? oa['user_info']['nickname']
+        redirect_to root_path, :alert => "もうしわけありません。現在ベータテスト中につき、ログインできません。試用してみたい場合は@tomy_kairaまでご連絡ください。"
+        return # reject
+      end
+    end
+
     authentication = Authentication.
       find_by_provider_and_uid(oa['provider'], oa['uid'])
     if authentication
