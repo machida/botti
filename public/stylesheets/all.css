@@ -1,0 +1,16 @@
+div#header {
+    text-align: right;
+}
+span#user_nav {
+    text-align: right;
+    padding-right: 30px;
+}
+div#wrapper {
+    backgournd-color: #000;
+    margin: 0 auto;
+    width: 640px;
+    border: 0px 1px solid black;
+}
+body {
+    background-color: #eeffee;
+}

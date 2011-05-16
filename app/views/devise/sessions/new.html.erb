@@ -1,0 +1,13 @@
+<h2>ログイン</h2>
+
+<p>
+<%= link_to "ぼっちの御伴", root_path %>には Twitter OAuth を利用してログインできます。<br />
+上のボタンからログインしてください。
+</p>
+
+<p>
+Twitter から友人の取得をおこなうので、 Twitter アカウントは必須です。
+まだアカウントをお持ちでない方は、 <%= link_to "Twitter", "http://twitter.com/" %> からサインアップできます。
+</p>
+
+<%= render :partial => "devise/shared/links" %>

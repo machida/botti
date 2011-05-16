@@ -1,0 +1,13 @@
+komaba1:
+  id: 1
+  tweet_id: 1
+  lat: 35.658273
+  lng: 139.685884
+  address: 東京都目黒区駒場
+komaba2:
+  id: 2
+  tweet_id: 2
+  lat: 35.658200
+  lng: 139.685800
+  address: 東京都目黒区駒場
+
