@@ -1,12 +1,12 @@
-tomykaira:
-  id: 2
-  user_id: 1
-  content: 駒場で飯くおう
-  created_at: <%= Time.now.ago(100) %>
-  updated_at: <%= Time.now.ago(99) %>
 tomykaira2:
   id: 1
   user_id: 1
   content: まじぼっち飯
   created_at: <%= Time.now.ago(201) %>
   updated_at: <%= Time.now.ago(200) %>
+tomykaira:
+  id: 2
+  user_id: 1
+  content: 駒場で飯くおう
+  created_at: <%= Time.now.ago(100) %>
+  updated_at: <%= Time.now.ago(99) %>

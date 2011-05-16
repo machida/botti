@@ -7,19 +7,24 @@
   <%= csrf_meta_tag %>
 </head>
 <body>
-<p class="notice"><%= notice %></p>
-<p class="alert"><%= alert %></p>
-
-<div id="user_nav">
+<div id="wrapper">
+<div id="header">
+<span id="user_nav">
+  <%= link_to "HOME", root_path %> | 
   <% if user_signed_in? %>
     <%= link_to "Sign out", destroy_user_session_path %> |
     <%= link_to "My page", current_user %>
   <% else %>  
-    <%= link_to "twitter でログイン", "/auth/twitter" %>
-  <% end %>  
-</div>  
+    <%= link_to(image_tag("sign-in-with-twitter-l.png", :title=>"Sign in with Twitter", :alt=>"Sign in with Twitter"), "/auth/twitter") %>
+  <% end %>
+</span>
+</div>
+<p class="notice"><%= notice %></p>
+<p class="alert"><%= alert %></p>
 
+<div id="content">
 <%= yield %>
-
+</div>
+</div>
 </body>
 </html>

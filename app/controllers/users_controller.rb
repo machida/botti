@@ -20,6 +20,10 @@ class UsersController < ApplicationController
 
   private
   def generate_js_string(user, tweet)
+    unless tweet.location
+      p tweet
+      return
+    end
     %Q% googlemap_controller.addFriend({
 pos:new google.maps.LatLng(#{tweet.location.lat},#{tweet.location.lng}),
 name: "#{user.nickname}",

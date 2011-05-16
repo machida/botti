@@ -39,6 +39,17 @@ describe User do
       it "should add @tomykaira to friends" do
         @botti.friends.first.should == @tomykaira
       end
+
+      it { @botti.connections.count.should == 1 }
+
+      context "when I login twice" do
+        before do
+          @botti = User.make
+          @botti.update_info(@oa_sample)
+        end
+
+        it { @botti.connections.count.should == 1}
+      end
     end
   end
 end

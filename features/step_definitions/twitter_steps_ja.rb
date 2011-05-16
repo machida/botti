@@ -63,3 +63,7 @@ end
 ならば /^(\d+)のサンプルアイコンが表示されていること$/ do |count|
   response.should have_selector "img[src='http://example.com/sample_image#{count}.png']"
 end
+
+ならば /ログインできること/ do
+  response.should have_selector "img[src^='/images/sign-in-with-twitter-l.png']"
+end
