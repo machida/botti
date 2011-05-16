@@ -1,10 +1,6 @@
 # -*- coding: utf-8 -*-
 class AuthenticationsController < ApplicationController
   before_filter :authenticate_user!, :only=>[:index, :destroy]
-  def index
-    @authentications = current_user.authentications
-  end
-
   def create
     oa = request.env["omniauth.auth"]
     authentication = Authentication.
@@ -32,11 +28,5 @@ class AuthenticationsController < ApplicationController
         sign_in_and_redirect(:user, user)
       end
     end
-  end
-
-  def destroy
-    @authentication = current_user.authentications.find(params[:id])
-    @authentication.destroy
-    redirect_to authentications_url, :notice => "当該の認証は無効化されました。"
   end
 end
