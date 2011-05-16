@@ -1,11 +1,9 @@
 Botti::Application.routes.draw do
   get "users/show"
 
-  resources :tweets, :only=>[:new,:create]
+  resources :tweets, :only=>[:create]
   resources :users, :only=>[:show]
 
-  get "welcome/about"
-  post "welcome/create"
   match '/auth/:provider/callback' => "authentications#create"
 
   devise_for :users, :path => "accounts"
