@@ -28,11 +28,24 @@ googlemap_controller.initialize = function() {
   }, i;
   this.map = new google.maps.Map(document.getElementById("map_canvas"), options);
 
+  geoLoc(function(pos) { googlemap_controller.setMyPosition(pos); });
+
+  while(this.friends.length){
+    this.setIcon(this.friends.pop());
+  }
+};
+
+googlemap_controller.addFriend = function(friend_info){
+  this.friends.push(friend_info);
+};
+
+function geoLoc(callback){
   // Try W3C Geolocation (Preferred)
   if(navigator.geolocation) {
     this.browserSupportFlag = true;
     navigator.geolocation.getCurrentPosition(function(pos) {
-      googlemap_controller.setMyPosition(new google.maps.LatLng(pos.coords.latitude,pos.coords.longitude));
+      callback.call(null, new google.maps.LatLng(pos.coords.latitude,pos.coords.longitude));
+      console.log("get");
     }, function() {
       handleNoGeolocation(this.browserSupportFlag);
     });
@@ -41,8 +54,8 @@ googlemap_controller.initialize = function() {
   } else if (google.gears) {
     this.browserSupportFlag = true;
     var geo = google.gears.factory.create('beta.geolocation');
-    geo.getCurrentPosition(function(position) {
-      googlemap_controller.setMyPosition(new google.maps.LatLng(position.latitude,position.longitude));
+    geo.getCurrentPosition(function(pos) {
+      callback.call(null, new google.maps.LatLng(position.latitude,position.longitude));
     }, function() {
       handleNoGeolocation(this.browserSupportFlag);
     });
@@ -52,22 +65,14 @@ googlemap_controller.initialize = function() {
     handleNoGeolocation(this.browserSupportFlag);
   }
 
-  while(this.friends.length){
-    this.setIcon(this.friends.pop());
-  }
-
   function handleNoGeolocation(errorFlag) {
     if (errorFlag == true) {
-      alert("Geolocation service failed.");
+      alert("位置情報の取得に失敗しました。再度ためしてください。問題が解決しない場合は、環境をそえて@tomy_kairaまで連絡をおねがいします。");
     } else {
-      alert("Your browser doesn't support geolocation. We've placed you in Siberia.");
+      alert("お使いのブラウザは位置情報を提供していません。このサービスの利用には位置情報の提供が必須です。");
     }
     map.setCenter(this.mypos);
   }
-};
-
-googlemap_controller.addFriend = function(friend_info){
-  this.friends.push(friend_info);
-};
+}
 
 $(document).ready(function(){googlemap_controller.initialize();});

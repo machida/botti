@@ -26,12 +26,12 @@ class TweetsController < ApplicationController
         end
 
         begin
-          Twitter.update(@tweet.content)
+          Twitter.update(@tweet.content + ENV['TWITTER_SUFFIX'])
         rescue Twitter::Forbidden
-          flash[:alert] = "投稿に失敗しました。次を確認してください。正しいアカウントを登録していますか? おなじ内容の投稿をくりかえしていませんか?"
+          flash[:alert] = "Twitterr への投稿に失敗しました。正しいアカウントを登録していますか? おなじ内容の投稿をくりかえしていませんか?"
         end
       else
-        flash[:alert] = "関連づけられた twitter アカウントが見つかりませんでした。"
+        flash[:alert] = "関連づけられた Twitter アカウントが見つかりませんでした。"
       end
     end
     if params[:tweet] && params[:tweet][:user_id]

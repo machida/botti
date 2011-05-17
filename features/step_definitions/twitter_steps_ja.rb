@@ -45,6 +45,7 @@ end
       config.oauth_token_secret = ENV['USER_SECRET']
     end
     Twitter.home_timeline[0].text.should be_include(@last_post_text)
+    Twitter.home_timeline[0].text.should be_include(ENV['TWITTER_SUFFIX'])
   end
 end
 
