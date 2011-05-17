@@ -45,7 +45,6 @@ function geoLoc(callback){
     this.browserSupportFlag = true;
     navigator.geolocation.getCurrentPosition(function(pos) {
       callback.call(null, new google.maps.LatLng(pos.coords.latitude,pos.coords.longitude));
-      console.log("get");
     }, function() {
       handleNoGeolocation(this.browserSupportFlag);
     });

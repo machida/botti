@@ -14,13 +14,11 @@ $(function(){
 $("#new_tweet").submit(function(ev){
 if ($("#tweet_ll").val() == "") {
 geoLoc(function(pos){
-console.log(pos);
 $("#tweet_ll").val(pos.Ia+","+pos.Ja);
 $("#new_tweet").submit();
 });
 ev.stopPropagation();
 ev.preventDefault();
-console.log("fin");
 }
 });});
 % %>
