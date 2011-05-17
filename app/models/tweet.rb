@@ -17,10 +17,6 @@ class Tweet < ActiveRecord::Base
     updated_at.in_time_zone("Tokyo").strftime("%H:%M %d日")
   end
 
-  def message
-    "#{user.nickname}: #{content} (#{time})"
-  end
-
   def self.remove_old_tweets
     self.delete_all(["updated_at < ?", 3.days.ago])
   end
