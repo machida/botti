@@ -27,10 +27,10 @@ class UsersController < ApplicationController
     %Q% googlemap_controller.addFriend({
 pos:new google.maps.LatLng(#{tweet.location.lat},#{tweet.location.lng}),
 name: "#{user.nickname}",
-image_url: "#{user.image_url || "/images/rails.png"}",
-message: "#{user.nickname}: #{tweet.content} (#{tweet.time})"
+image_url: "#{user.image_url}",
+message: "#{tweet.message}"
 }
-);%
+);% # you cannot remove these "#{}"
   end
 
   def get_friend_tweets(user)

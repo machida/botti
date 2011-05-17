@@ -14,6 +14,7 @@
     <li class="tweet">
       <%= t.user.nickname %> : <%= t.content %>
       <span class="location">@ <%= t.location.address if t.location -%></span>
+      <%= link_to "DM", message_tweet_path(t) %>
       <span class="time">(<%= t.time %>)</span></li>
   <% end -%>
   </ul>
