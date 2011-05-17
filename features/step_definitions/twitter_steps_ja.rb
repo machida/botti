@@ -20,7 +20,6 @@ end
 
 前提 /^twitter ログイン準備$/ do
   OmniAuth.config.mock_auth[:twitter] = TEST_OAINFO
-  p TEST_OAINFO
 end
 
 前提 /^twitter ログイン$/ do

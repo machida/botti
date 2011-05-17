@@ -25,7 +25,6 @@ class UsersController < ApplicationController
       return
     end
     link = (user == current_user) ? "" : "<a href=#{message_tweet_path(tweet)}>DM</a>"
-    p link
     %Q% googlemap_controller.addFriend({
 pos:new google.maps.LatLng(#{tweet.location.lat},#{tweet.location.lng}),
 name: "#{user.nickname}",
