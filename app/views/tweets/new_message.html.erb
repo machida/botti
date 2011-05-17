@@ -1,10 +1,15 @@
 <% title "メッセージ送信" %>
 <div id="original_message">
-<%= @tweet.user.nickname %> <br />
-<%= @tweet.content %>
+<div id="image_wrapper" class="left">
+<%= image_tag(@tweet.user.image_url, :size=>"48x48", :alt=>"User Icon") %>
+</div>
+<div class="left">
+  <span class="name"><%= @tweet.user.nickname %></span><br />
+  <%= @tweet.content %>
+</div>
 </div>
 <%= form_tag message_tweet_path(@tweet) do -%>
-  <div id="new_message_container" class="container">
+  <div id="new_message_container" class="container clear">
     <%= text_field_tag "message", params['message'] || "ご一緒させてください", :size=>50 %>(100字以内)<br />
     <%= submit_tag '声をかける' %>
   </div>

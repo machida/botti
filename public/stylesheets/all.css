@@ -22,7 +22,7 @@ div#image_wrapper {
 div.left {
     float: left;
 }
-div#map {
+div.clear {
     clear:left;
 }
 div#content {
@@ -45,4 +45,11 @@ p.notice {
 }
 h2, h3{
     color: #333333;
+}
+div#original_message{
+    line-height: 1.5em;
+}
+span.name{
+    font-size: 120%;
+    padding: 10px 0 0 10px;
 }
