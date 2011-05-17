@@ -61,7 +61,8 @@ describe TweetsController do
         should_not be_nil ##gautlet
       Tweet.any_instance.stubs(:set_location).returns(true)
       Twitter.should_receive(:update).and_raise(Twitter::Forbidden)
-      post :create, :tweet=>{:user_id=>@u.id, :ontwitter=>"1"}
+      post :create, :tweet=>{:user_id=>@u.id, :ontwitter=>"1",
+        :content => "pseudo content"}
     end
     it { flash[:notice].should contain "投稿しました。" }
     it { flash[:alert].should contain "おなじ内容の投稿をくりかえしていませんか?"}

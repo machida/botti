@@ -41,4 +41,16 @@ class TweetsController < ApplicationController
       redirect_to root_path
     end
   end
+
+  def new_message
+    @tweet = Tweet.find(params[:id])
+    # user check
+    # create string
+  end
+
+  def create_tweet
+    @tweet = Tweet.find(params[:id])
+    # user check
+    # send DM
+  end
 end

@@ -30,10 +30,17 @@ end
   visit destroy_user_session_path
 end
 
-もし /^twitter 用字句生成/ do
-  @last_post_text = "cucumber をもちいたテスト投稿#{Time.now}"
-  もし %{"内容"に"#{@last_post_text}"と入力する}
-  set_hidden_field "tweet_ll", :to=>"35.647401,139.716911"
+もし /^"([^"]*)"に twitter 用字句生成/ do |form| #"
+  case form
+  when "つぶやき"
+    @last_post_text = "cucumber をもちいたテスト投稿#{Time.now}"
+    もし %{"内容"に"#{@last_post_text}"と入力する}
+    set_hidden_field "tweet_ll", :to=>"35.647401,139.716911"
+  when "メッセージ"
+    pending
+  else
+    pending
+  end
 end
 
 ならば /^"([^"]*)"に投稿されていること$/ do |service| #"
@@ -67,4 +74,8 @@ end
 
 ならば /ログインできること/ do
   response.should have_selector "img[src^='/images/sign-in-with-twitter-l.png']"
+end
+
+ならば /DMが送信されていること/ do
+  pending
 end
