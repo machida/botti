@@ -3,8 +3,8 @@ Botti::Application.routes.draw do
 
   resources :tweets, :only=>[:create] do
     member do
-      post :message, :action => :new_message
-      get :message, :action => :create_message
+      post :message, :action => :create_message
+      get :message, :action => :new_message
     end
   end
   resources :users, :only=>[:show]

@@ -4,6 +4,15 @@ require File.expand_path(File.join(File.dirname(__FILE__), "..", "support", "sel
 
 @last_post_text = ""
 
+def config_twitter
+  Twitter.configure do |config|
+    config.consumer_key = ENV['CONSUMER_KEY']
+    config.consumer_secret = ENV['CONSUMER_SECRET']
+    config.oauth_token = ENV['USER_TOKEN']
+    config.oauth_token_secret = ENV['USER_SECRET']
+  end
+end
+
 前提 /^twitter アカウントを登録している/ do
   前提 %{twitter ログイン}
   前提 %{ログアウト}
@@ -37,7 +46,8 @@ end
     もし %{"内容"に"#{@last_post_text}"と入力する}
     set_hidden_field "tweet_ll", :to=>"35.647401,139.716911"
   when "メッセージ"
-    pending
+    @message_text = "いくいく #{Time.now}"
+    もし %{"message"に"#{@message_text}"と入力する}
   else
     pending
   end
@@ -45,12 +55,7 @@ end
 
 ならば /^"([^"]*)"に投稿されていること$/ do |service| #"
   if service  == "twitter"
-    Twitter.configure do |config|
-      config.consumer_key = ENV['CONSUMER_KEY']
-      config.consumer_secret = ENV['CONSUMER_SECRET']
-      config.oauth_token = ENV['USER_TOKEN']
-      config.oauth_token_secret = ENV['USER_SECRET']
-    end
+    config_twitter
     Twitter.home_timeline[0].text.should be_include(@last_post_text)
     Twitter.home_timeline[0].text.should be_include(ENV['TWITTER_SUFFIX'])
   end
@@ -58,12 +63,7 @@ end
 
 ならば /^"([^"]*)"に投稿されていないこと$/ do |service| #"
   if service  == "twitter"
-    Twitter.configure do |config|
-      config.consumer_key = ENV['CONSUMER_KEY']
-      config.consumer_secret = ENV['CONSUMER_SECRET']
-      config.oauth_token = ENV['USER_TOKEN']
-      config.oauth_token_secret = ENV['USER_SECRET']
-    end
+    config_twitter
     Twitter.home_timeline[0].text.should_not be_include(@last_post_text)
   end
 end
@@ -77,5 +77,13 @@ end
 end
 
 ならば /DMが送信されていること/ do
-  pending
+  config_twitter
+  dm = Twitter.direct_messages_sent(:count => 1)[0]
+  dm.text.should be_include(@message_text)
+end
+
+ならば /DMが送信されていないこと/ do
+  config_twitter
+  dm = Twitter.direct_messages_sent(:count => 1)[0]
+  dm.text.should be_include(@message_text)
 end

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+require 'jcode' # length validation
 class TweetsController < ApplicationController
   before_filter :authenticate_user!
   def new
@@ -16,22 +17,11 @@ class TweetsController < ApplicationController
     end
 
     if params[:tweet][:ontwitter] == "1"
-      auth = current_user.authentications.find_by_provider("twitter")
-      if auth
-        Twitter.configure do |config|
-          config.consumer_key = ENV['CONSUMER_KEY']
-          config.consumer_secret = ENV['CONSUMER_SECRET']
-          config.oauth_token = auth.token
-          config.oauth_token_secret = auth.secret
-        end
-
-        begin
-          Twitter.update(@tweet.content + ENV['TWITTER_SUFFIX'])
-        rescue Twitter::Forbidden
-          flash[:alert] = "Twitterr への投稿に失敗しました。正しいアカウントを登録していますか? おなじ内容の投稿をくりかえしていませんか?"
-        end
-      else
-        flash[:alert] = "関連づけられた Twitter アカウントが見つかりませんでした。"
+      begin
+        config_twitter
+        Twitter.update(@tweet.content + ENV['TWITTER_SUFFIX'])
+      rescue Twitter::Forbidden, Twitter::Unauthorized
+        flash[:alert] = "Twitter への投稿に失敗しました。正しいアカウントを登録していますか? おなじ内容の投稿をくりかえしていませんか?"
       end
     end
     if params[:tweet] && params[:tweet][:user_id]
@@ -45,12 +35,51 @@ class TweetsController < ApplicationController
   def new_message
     @tweet = Tweet.find(params[:id])
     # user check
+    if @tweet.user == current_user
+      redirect_to current_user, :notice => "自分は誘えません"
+      return
+    end
     # create string
   end
 
-  def create_tweet
+  def create_message
     @tweet = Tweet.find(params[:id])
     # user check
+    if @tweet.user == current_user
+      redirect_to current_user, :notice => "自分は誘えません"
+      return
+    end
+    # content check
+    if params[:message].blank? || params[:message].jsize >= 100
+      flash[:alert] = "入力内容を確認してください。(入力されていますか?長すぎませんか?)"
+      render :template => "tweets/new_message"
+      return
+    end
     # send DM
+    begin
+      config_twitter()
+      Twitter.direct_message_create(@tweet.user.authentications.first.uid,
+                             params[:message] + ENV['MESSAGE_SUFFIX'])
+      redirect_to current_user, :notice => "声をかけました"
+    rescue Twitter::Forbidden, Twitter::Unauthorized
+      flash[:alert] = "投稿に失敗しました"
+      render :template => "tweets/new_message"
+      return
+    end
+  end
+
+  private
+  def config_twitter
+    if auth = current_user.authentications.find_by_provider("twitter")
+      Twitter.configure do |config|
+        config.consumer_key = ENV['CONSUMER_KEY']
+        config.consumer_secret = ENV['CONSUMER_SECRET']
+        config.oauth_token = auth.token
+        config.oauth_token_secret = auth.secret
+      end
+      return true
+    else
+      return false
+    end
   end
 end
