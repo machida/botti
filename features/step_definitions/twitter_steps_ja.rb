@@ -20,6 +20,7 @@ end
 
 前提 /^twitter ログイン準備$/ do
   OmniAuth.config.mock_auth[:twitter] = TEST_OAINFO
+  p TEST_OAINFO
 end
 
 前提 /^twitter ログイン$/ do
@@ -29,10 +30,15 @@ end
 
 もし /^情報を変更してログイン$/ do
   前提 %{twitter ログイン準備}
+  @backup_info = OmniAuth.config.mock_auth[:twitter]['user_info'].clone
   OmniAuth.config.mock_auth[:twitter]["user_info"]["image"] =
     'http://example.com/sample_image2.png'
   OmniAuth.config.mock_auth[:twitter]["user_info"]["nickname"] = "tomy_kaira"
   visit '/auth/twitter'
+end
+
+もし /^もとにもどす$/ do
+  OmniAuth.config.mock_auth[:twitter]['user_info'] = @backup_info
 end
 
 前提 /^ログアウト$/ do
