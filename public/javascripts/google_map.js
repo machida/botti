@@ -1,3 +1,5 @@
+// Load this only in map.html
+
 var googlemap_controller = {
   browserSupportFlag : false,
   mypos : null,
@@ -18,25 +20,21 @@ var googlemap_controller = {
     google.maps.event.addListener(marker, "click", function(){
       iw.open(this.map, marker);
     });
+  },
+  addFriend : function(friend_info){
+    this.friends.push(friend_info);
+  },
+  initialize : function() {
+    var options = {
+      zoom: 12,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    }, i;
+    this.map = new google.maps.Map(document.getElementById("map_canvas"), options);
+    geoLoc(function(pos) { googlemap_controller.setMyPosition(pos); });
+    while(this.friends.length){
+      this.setIcon(this.friends.pop());
+    }
   }
-};
-
-googlemap_controller.initialize = function() {
-  var options = {
-    zoom: 12,
-    mapTypeId: google.maps.MapTypeId.ROADMAP
-  }, i;
-  this.map = new google.maps.Map(document.getElementById("map_canvas"), options);
-
-  geoLoc(function(pos) { googlemap_controller.setMyPosition(pos); });
-
-  while(this.friends.length){
-    this.setIcon(this.friends.pop());
-  }
-};
-
-googlemap_controller.addFriend = function(friend_info){
-  this.friends.push(friend_info);
 };
 
 function geoLoc(callback){
