@@ -14,7 +14,8 @@ $(function(){
 $("#new_tweet").submit(function(ev){
 if ($("#tweet_ll").val() == "") {
 geoLoc(function(pos){
-$("#tweet_ll").val(pos.Ia+","+pos.Ja);
+var str = pos.toString(); // remove paren
+$("#tweet_ll").val(str.splice(1, str.length-2));
 $("#new_tweet").submit();
 });
 ev.stopPropagation();

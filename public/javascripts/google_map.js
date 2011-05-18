@@ -69,7 +69,6 @@ function geoLoc(callback){
     } else {
       alert("お使いのブラウザは位置情報を提供していません。このサービスの利用には位置情報の提供が必須です。");
     }
-    map.setCenter(this.mypos);
   }
 }
 
