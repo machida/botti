@@ -27,7 +27,7 @@ var googlemap_controller = {
   },
   initialize : function() {
     var options = {
-      zoom: 12,
+      zoom: 14,
       mapTypeId: google.maps.MapTypeId.ROADMAP
     }, i;
     this.map = new google.maps.Map(document.getElementById("map_canvas"), options);

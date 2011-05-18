@@ -3,6 +3,7 @@ class UsersController < ApplicationController
   before_filter :authenticate_user!
   def show
     @user = User.find(params[:id])
+    @js_query = ""
     if @user != current_user
       redirect_to current_user
     end
@@ -14,7 +15,7 @@ class UsersController < ApplicationController
       @friend_tweets << @user.tweets.order("updated_at DESC").first
     end
     @friend_tweets.reverse.each do |t|
-      @js_query = generate_json(t.user, t)
+      @js_query += generate_json(t.user, t)
     end
   end
 
