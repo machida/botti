@@ -14,24 +14,27 @@ class UsersController < ApplicationController
       @friend_tweets << @user.tweets.order("updated_at DESC").first
     end
     @friend_tweets.reverse.each do |t|
-      @js_query = generate_js_string(t.user, t)
+      @js_query = generate_json(t.user, t)
     end
   end
 
   private
-  def generate_js_string(user, tweet)
+  def generate_json(user, tweet)
     unless tweet.location
       p tweet
       return
     end
-    link = (user == current_user) ? "" : "<a href=#{message_tweet_path(tweet)}>DM</a>"
-    %Q% googlemap_controller.addFriend({
-pos:new google.maps.LatLng(#{tweet.location.lat},#{tweet.location.lng}),
-name: "#{user.nickname}",
-image_url: "#{user.image_url}",
-message: "#{user.nickname}: #{tweet.content} #{link} (#{tweet.time})"
-}
-);% # you cannot remove these "#{}"
+    params = {
+      :address => tweet.location.address,
+      :lat => tweet.location.lat,
+      :lng => tweet.location.lng,
+      :name => user.nickname,
+      :image_url => user.image_url,
+      :content => tweet.content,
+      :link => (user == current_user) ? "" : "<a href=#{message_tweet_path(tweet)}>DM</a>",
+      :time => tweet.time
+    }
+    %Q% googlemap_controller.addFriend(#{params.to_json});%
   end
 
   def get_friend_tweets(user)

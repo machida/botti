@@ -9,13 +9,14 @@ var googlemap_controller = {
     this.mypos = pos;
     this.map.setCenter(pos);
   },
-  setIcon : function(friend_info){
-    var iw = new google.maps.InfoWindow({content: friend_info.message}),
+  setIcon : function(info){
+    info.message = [info.name, ":", info.content, info.link, "("+info.time+")"].join(" ");
+    var iw = new google.maps.InfoWindow({content: info.message}),
         marker = new google.maps.Marker({
-          position: friend_info.pos,
+          position: new google.maps.LatLng(info.lat,info.lng),
           map: this.map,
-          title: friend_info.name,
-          icon: friend_info.image_url
+          title: info.name,
+          icon: info.image_url
         });
     google.maps.event.addListener(marker, "click", function(){
       iw.open(this.map, marker);
