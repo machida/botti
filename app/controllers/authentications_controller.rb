@@ -29,11 +29,16 @@ class AuthenticationsController < ApplicationController
       else
         flash[:notice] = "新規アカウント。ログインしました"
         user = User.new(:nickname=>oa['user_info']['nickname'])
-        user.update_info(oa)
         user.authentications.build(:provider=>oa['provider'],
                              :uid=>oa['uid'],
                              :token=>oa['credentials']['token'],
                              :secret=>oa['credentials']['secret'])
+        begin
+          user.update_info(oa)
+        rescue Twitter::Unauthorized
+          redirect_to auth_failure_path, :alert => "認証に失敗しました。プライベートモードにしている場合、ご利用いただけない場合があります。"
+          return
+        end
         user.save!
         sign_in_and_redirect(:user, user)
       end

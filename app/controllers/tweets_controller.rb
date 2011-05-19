@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 require 'jcode' # length validation
 class TweetsController < ApplicationController
+  include ApplicationHelper
+
   before_filter :authenticate_user!
   def new
     @tweet = Tweet.new
@@ -18,7 +20,7 @@ class TweetsController < ApplicationController
 
     if params[:tweet][:ontwitter] == "1"
       begin
-        config_twitter
+        config_twitter(current_user.authentications.find_by_provider("twitter"))
         Twitter.update(@tweet.content + ENV['TWITTER_SUFFIX'])
       rescue Twitter::Forbidden, Twitter::Unauthorized
         flash[:alert] = "Twitter への投稿に失敗しました。正しいアカウントを登録していますか? おなじ内容の投稿をくりかえしていませんか?"
@@ -57,7 +59,7 @@ class TweetsController < ApplicationController
     end
     # send DM
     begin
-      config_twitter()
+      config_twitter(current_user.authentications.find_by_provider("twitter"))
       Twitter.direct_message_create(@tweet.user.authentications.first.uid,
                              params[:message] + ENV['MESSAGE_SUFFIX'])
       redirect_to current_user, :notice => "声をかけました"
@@ -65,21 +67,6 @@ class TweetsController < ApplicationController
       flash[:alert] = "投稿に失敗しました"
       render :template => "tweets/new_message"
       return
-    end
-  end
-
-  private
-  def config_twitter
-    if auth = current_user.authentications.find_by_provider("twitter")
-      Twitter.configure do |config|
-        config.consumer_key = ENV['CONSUMER_KEY']
-        config.consumer_secret = ENV['CONSUMER_SECRET']
-        config.oauth_token = auth.token
-        config.oauth_token_secret = auth.secret
-      end
-      return true
-    else
-      return false
     end
   end
 end

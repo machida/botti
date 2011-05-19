@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 class User < ActiveRecord::Base
+  include ApplicationHelper
+
   has_many :authentications, :dependent=>:destroy
   has_many :tweets, :dependent=>:destroy
   has_many :connections, :dependent=>:destroy
@@ -22,6 +24,7 @@ class User < ActiveRecord::Base
   def update_info(oa)
     update_attribute(:nickname,oa['user_info']['nickname'])
     update_attribute(:image_url,oa['user_info']['image'])
+    config_twitter(authentications.find_by_provider("twitter"))
     Twitter.friend_ids(oa['user_info']['nickname'])["ids"].each do |id|
       if auth = Authentication.find_by_provider_and_uid(oa['provider'], id)
         unless friends.include? auth.user
