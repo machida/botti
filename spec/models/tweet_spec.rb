@@ -25,14 +25,6 @@ describe Tweet do
     end
   end
 
-  describe "time returns local time" do
-    before do
-      @t = Tweet.new
-      @t.updated_at = Time.local(2011,5,16,18,15,11)
-    end
-    it { @t.time.should == "18:15 16日" }
-  end
-
   describe "remove old tweets" do
     before do
       Tweet.any_instance.stubs(:valid?).returns(true)
