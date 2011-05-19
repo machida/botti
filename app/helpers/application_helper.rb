@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 module ApplicationHelper
   def config_twitter(auth)
     if auth
@@ -11,5 +12,12 @@ module ApplicationHelper
     else
       return false
     end
+  end
+end
+
+Tweet.class_eval do
+  include ActionView::Helpers::DateHelper
+  def time
+    time_ago_in_words(updated_at) + "前"
   end
 end

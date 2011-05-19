@@ -13,10 +13,6 @@ class Tweet < ActiveRecord::Base
     self.save!
   end
 
-  def time
-    updated_at.in_time_zone("Tokyo").strftime("%H:%M %d日")
-  end
-
   def self.remove_old_tweets
     self.delete_all(["updated_at < ?", 3.days.ago])
   end
