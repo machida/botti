@@ -21,6 +21,7 @@ describe User do
       before do
         @u = User.make
         @u.image_url.should_not == TEST_OAINFO['user_info']['image'] # gauntlet
+        Twitter.stub(:friend_ids).and_return({"ids"=>[]})
         @u.update_info(@oa_sample)
       end
       subject{@u}
@@ -30,9 +31,10 @@ describe User do
 
     describe "loading friend" do
       before do
-        @a = Authentication.make(:uid=>287606751, :provider=>"twitter")
-        @tomykaira = User.make(:authentications=>[@a])
-        @botti = User.make
+        @tomykaira = User.make(:authentications=>[
+                                 Authentication.make(:uid=>123456)])
+        @botti = User.make()
+        Twitter.stub(:friend_ids).and_return({"ids" => [123456]})
         @botti.update_info(@oa_sample)
       end
 

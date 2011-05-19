@@ -15,7 +15,7 @@ Sham.define do
 end
 
 Authentication.blueprint do
-  provider "faker"
+  provider "twitter"
   uid
   token
   secret
