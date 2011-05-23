@@ -11,6 +11,7 @@
 <div id="wrapper">
 <div id="header">
 <span id="user_nav">
+  <%= link_to "アンケート", "https://spreadsheets.google.com/spreadsheet/viewform?hl=ja_JP&formkey=dHVCZ3I2c1g5V1Z1Qms1MERzd3M1YUE6MQ#gid=0" %> | 
   <%= link_to "HOME", root_path %> | 
   <% if user_signed_in? %>
     <%= link_to "Sign out", destroy_user_session_path %> |
