@@ -7,22 +7,6 @@
 <div id="map" class="clear">
   <%= render :partial=>"map" %>
 </div>
-<div id="friends_status">
-<h3>友達のぼっち飯</h3>
-<% if @user.friends.count > 0 -%>
-  <ul>
-  <% @friend_tweets.each do |t| -%>
-    <li class="tweet">
-      <%= t.user.nickname %> : <%= t.content %>
-      <span class="location">@ <%= t.location.address if t.location -%></span>
-      <%= link_to "DM", message_tweet_path(t) if t.user != current_user %>
-      <span class="time">(<%= t.time %>)</span></li>
-  <% end -%>
-  </ul>
-<% else %>
-  友達がいません。
-<% end %>
-</div>
 <div id="my_status">
 <h3>最近のぼっち飯</h3>
 <% if @tweets.count>0 -%>

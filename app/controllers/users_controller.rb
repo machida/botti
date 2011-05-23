@@ -10,13 +10,13 @@ class UsersController < ApplicationController
     @tweets = @user.tweets.order("updated_at DESC")
     @tweet = Tweet.new(:user_id=>@user.id,
                    :content=>"ぼっち飯なう")
-    @friend_tweets = get_friend_tweets(@user)
-    if @user.tweets.count > 0
-      @friend_tweets << @user.tweets.order("updated_at DESC").first
-    end
-    @friend_tweets.reverse.each do |t|
-      @js_query += generate_json(t.user, t)
-    end
+    # @friend_tweets = get_friend_tweets(@user)
+    # if @user.tweets.count > 0
+    #   @friend_tweets << @user.tweets.order("updated_at DESC").first
+    # end
+    # @friend_tweets.reverse.each do |t|
+    #   @js_query += generate_json(t.user, t)
+    # end
   end
 
   private
