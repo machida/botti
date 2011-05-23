@@ -1,5 +1,5 @@
 <div id="form_wrapper" class="left">
-<%= form_for @tweet do |f| -%>
+<%= form_for( @tweet, :remote => true ) do |f| -%>
   <%= f.hidden_field :user_id %>
   <%= f.label :content, "内容" %>
   <%= f.text_field :content, :size=>50 %>
@@ -9,17 +9,6 @@
   <%= f.submit "投稿" %>
 <% end -%>
 </div> 
-<%= javascript_tag %Q%
-$(function(){
-$("#new_tweet").submit(function(ev){
-if ($("#tweet_ll").val() == "") {
-geoLoc(function(pos){
-var str = pos.toString(); // remove paren
-$("#tweet_ll").val(str.substr(1, str.length-2));
-$("#new_tweet").submit();
-});
-ev.stopPropagation();
-ev.preventDefault();
-}
-});});
-% %>
+<div id="response">
+  
+</div>

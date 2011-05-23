@@ -13,9 +13,9 @@ class TweetsController < ApplicationController
     begin
       @tweet.set_location
       @tweet.save!
-      flash[:notice] = "投稿しました。"
+      notice = "投稿しました。"
     rescue Geokit::Geocoders::GeocodeError, ActiveRecord::RecordInvalid
-      flash[:alert] = "入力内容を確認してください。(位置情報は有効になっていますか?)"
+      alert = "入力内容を確認してください。(位置情報は有効になっていますか?)"
     end
 
     if params[:tweet][:ontwitter] == "1"
@@ -23,11 +23,19 @@ class TweetsController < ApplicationController
         config_twitter(current_user.authentications.find_by_provider("twitter"))
         Twitter.update(@tweet.content + ENV['TWITTER_SUFFIX'])
       rescue Twitter::Forbidden, Twitter::Unauthorized
-        flash[:alert] = "Twitter への投稿に失敗しました。正しいアカウントを登録していますか? おなじ内容の投稿をくりかえしていませんか?"
+        alert = "Twitter への投稿に失敗しました。" +
+          "正しいアカウントを登録していますか? おなじ内容の投稿をくりかえしていませんか?"
       end
     end
     if params[:tweet] && params[:tweet][:user_id]
-      redirect_to user_path(params[:tweet][:user_id])
+      respond_to do |format|
+        format.html { redirect_to user_path(params[:tweet][:user_id]),
+          :notice=>notice, :alert => alert }
+        format.js do
+          render :json => {:alert => alert, :notice => notice,
+            :messages => ""}, :content_type => 'text/json'
+        end
+      end
     else
       flash[:alert] = "不正な投稿"
       redirect_to root_path
