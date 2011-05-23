@@ -1,3 +1,18 @@
+// Tweeting related scripts
+
+
+function update(){
+  $.getJSON("/user/friend_tweets.js", function(data){
+    var i = data.length;
+
+    // 既存のアイテムを削除
+    googlemap_controller.clearMarkers();
+    while (i--){
+      googlemap_controller.addFriend(data[i]);
+    }
+  });
+}
+
 $(document).ready( function() {
   $( "#new_tweet" ).bind("ajax:before", function() {
       if ( $( "#tweet_ll" ).val() == "" ) {
@@ -24,19 +39,5 @@ $(document).ready( function() {
     });
 
   update(); // Initial update
-  var int_id = setInterval( update, 60000 );
-  setTimeout( googlemap_controller.clearMarkers, 10000 );
-
-  function update(){
-    $.getJSON("/user/friend_tweets.js", function(data){
-      var max = data.length, i = 0;
-
-      // 既存のアイテムを削除
-
-      for( i = 0; i < max; i ++ ){
-        googlemap_controller.addFriend(data[i]);
-      }
-    });
-  }
-  
+  var int_id = setInterval( update, 60000 ); 
 });

@@ -25,10 +25,13 @@ var googlemap_controller = {
     google.maps.event.addListener(marker, "click", function(){
       iw.open(this.map, marker);
     });
+    this.markers.push(marker);
   },
 
   clearMarkers : function() {
-    console.log("clearing");
+    while( this.markers.length ) {
+      this.markers.pop().setMap(null);
+    }
   },
 
   initialize : function() {
@@ -37,6 +40,7 @@ var googlemap_controller = {
       mapTypeId: google.maps.MapTypeId.ROADMAP
     }, i;
     this.map = new google.maps.Map(document.getElementById("map_canvas"), options);
+    this.markers = [];
     geoLoc(function(pos) { googlemap_controller.setMyPosition(pos); });
     while(this.friends.length){
       this.setIcon(this.friends.pop());
