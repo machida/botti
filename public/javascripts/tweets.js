@@ -24,6 +24,10 @@ $(document).ready( function() {
     });
 
   $.getJSON( "/user/friend_tweets.js", function(data){
+    var max = data.length, i = 0;
     console.log(data);
+    for( i = 0; i < max; i ++ ){
+      googlemap_controller.addFriend(data[i]);
+    }
   } );
 });

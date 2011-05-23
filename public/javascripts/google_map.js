@@ -9,7 +9,7 @@ var googlemap_controller = {
     this.mypos = pos;
     this.map.setCenter(pos);
   },
-  setIcon : function(info){
+  addFriend : function(friend_info){
     info.message = [info.name, ":", info.content, info.link, "("+info.time+")"].join(" ");
     var iw = new google.maps.InfoWindow({content: info.message}),
         marker = new google.maps.Marker({
@@ -21,9 +21,6 @@ var googlemap_controller = {
     google.maps.event.addListener(marker, "click", function(){
       iw.open(this.map, marker);
     });
-  },
-  addFriend : function(friend_info){
-    this.friends.push(friend_info);
   },
   initialize : function() {
     var options = {

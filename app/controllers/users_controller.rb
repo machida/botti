@@ -29,6 +29,7 @@ class UsersController < ApplicationController
     end
 
     respond_to do |format|
+      ActiveRecord::Base.include_root_in_json = false
       format.js   { render :json => @ft, :content_type => "text/json" }
     end
   end

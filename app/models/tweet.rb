@@ -17,11 +17,13 @@ class Tweet < ActiveRecord::Base
     self.delete_all(["updated_at < ?", 3.days.ago])
   end
 
-  def to_json
+  def as_json(options = {})
+    p "called"
+    options[:dm] ||= true
     {
       :content => content,
       :time => time,
-      :dm => (user == current_user) ? "" : message_tweet_path(tweet),
+      :dm => options[:dm] ? id : "",
       :location => {
         :address => location.address,
         :lat => location.lat,
@@ -30,23 +32,5 @@ class Tweet < ActiveRecord::Base
       :user => {:name => user.nickname, :image_url => user.image_url}
     }
   end
- # def generate_json(user, tweet)
-  #   unless tweet.location
-  #     p tweet
-  #     return
-  #   end
-  #   params = {
-  #     :address => tweet.location.address,
-  #     :lat => ,
-  #     :lng => tweet.location.lng,
-
-  #     :name => user.nickname,
-  #     :image_url => user.image_url,
-
-  #     :content => tweet.content,
-  #     :link => ,
-  #     :time => tweet.time
-  #   }
   #   %Q% googlemap_controller.addFriend(#{params.to_json});%
-#end
 end
