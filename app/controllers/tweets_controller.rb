@@ -46,7 +46,7 @@ class TweetsController < ApplicationController
     @tweet = Tweet.find(params[:id])
     # user check
     if @tweet.user == current_user
-      redirect_to current_user, :notice => "自分は誘えません"
+      redirect_to user_path, :notice => "自分は誘えません"
       return
     end
     # create string
@@ -57,7 +57,7 @@ class TweetsController < ApplicationController
 
     # user check
     if @tweet.user == current_user
-      redirect_to current_user, :notice => "自分は誘えません"
+      redirect_to user_path, :notice => "自分は誘えません"
       return
     end
 
@@ -78,7 +78,7 @@ class TweetsController < ApplicationController
         Twitter.direct_message_create(@tweet.user.authentications.first.uid,
                                params[:message] + ENV['MESSAGE_SUFFIX'])
       end
-      redirect_to current_user, :notice => "声をかけました"
+      redirect_to user_path, :notice => "声をかけました"
     rescue Twitter::Forbidden, Twitter::Unauthorized
       flash[:alert] = "投稿に失敗しました"
       render :template => "tweets/new_message"

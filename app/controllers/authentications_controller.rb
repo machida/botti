@@ -24,7 +24,7 @@ class AuthenticationsController < ApplicationController
       if current_user
         # TODO: 別のアカウントとの関連づけをあたえる
         flash[:notice] = "ログイン済み"
-        redirect_to current_user
+        redirect_to user_path
         return
       else
         flash[:notice] = "新規アカウント。ログインしました"

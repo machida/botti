@@ -14,7 +14,7 @@
   <%= link_to "HOME", root_path %> | 
   <% if user_signed_in? %>
     <%= link_to "Sign out", destroy_user_session_path %> |
-    <%= link_to current_user.nickname, current_user %>
+    <%= link_to current_user.nickname, user_path %>
   <% else %>  
     <%= link_to(image_tag("sign-in-with-twitter-l.png", :title=>"Sign in with Twitter", :alt=>"Sign in with Twitter"), "/auth/twitter") %>
   <% end %>
