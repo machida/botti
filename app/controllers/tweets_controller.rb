@@ -29,8 +29,7 @@ class TweetsController < ApplicationController
     end
     if params[:tweet] && params[:tweet][:user_id]
       respond_to do |format|
-        format.html { redirect_to user_path(params[:tweet][:user_id]),
-          :notice=>notice, :alert => alert }
+        format.html { redirect_to user_path, :notice=>notice, :alert => alert }
         format.js do
           render :json => {:alert => alert, :notice => notice,
             :messages => ""}, :content_type => 'text/json'

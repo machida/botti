@@ -25,7 +25,7 @@ class UsersController < ApplicationController
     @ft.sort_by{|obj| obj.updated_at}
 
     if current_user.tweets.count > 0
-      @friend_tweets << current_user.tweets.order("updated_at DESC").first
+      @ft << current_user.tweets.order("updated_at DESC").first
     end
 
     respond_to do |format|
@@ -34,22 +34,4 @@ class UsersController < ApplicationController
   end
 
   private
-  def generate_json(user, tweet)
-    unless tweet.location
-      p tweet
-      return
-    end
-    params = {
-      :address => tweet.location.address,
-      :lat => tweet.location.lat,
-      :lng => tweet.location.lng,
-      :name => user.nickname,
-      :image_url => user.image_url,
-      :content => tweet.content,
-      :link => (user == current_user) ? "" : "<a href=#{message_tweet_path(tweet)}>DM</a>",
-      :time => tweet.time
-    }
-    %Q% googlemap_controller.addFriend(#{params.to_json});%
-  end
-
 end

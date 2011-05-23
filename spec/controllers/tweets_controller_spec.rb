@@ -31,7 +31,7 @@ describe TweetsController do
         mock_tweet.stub!(:save!).and_raise(ActiveRecord::RecordInvalid.new(mock_tweet))
         post :create, :tweet=>{:user_id => @u.id}
       end
-      it { response.should redirect_to @u}
+      it { response.should redirect_to user_path}
       it { flash[:alert].should contain "入力内容を確認してください。" }
       after do
         Tweet.any_instance.stubs(:valid?).returns(true)
@@ -45,7 +45,7 @@ describe TweetsController do
         mock_tweet.stub(:set_location).and_raise(Geokit::Geocoders::GeocodeError)
         post :create, :tweet=>{:user_id =>@u.id}
       end
-      it { response.should redirect_to @u}
+      it { response.should redirect_to user_path}
       it { flash[:alert].should contain "入力内容を確認してください。" }
     end
   end
@@ -66,7 +66,7 @@ describe TweetsController do
     end
     it { flash[:notice].should contain "投稿しました。" }
     it { flash[:alert].should contain "おなじ内容の投稿をくりかえしていませんか?"}
-    it { response.should redirect_to @u }
+    it { response.should redirect_to user_path }
   end
 
   context "when not tweeting on twitter" do
@@ -83,7 +83,7 @@ describe TweetsController do
     end
     it { flash[:notice].should contain "投稿しました。" }
     it { flash[:alert].should be_nil}
-    it { response.should redirect_to @u }
+    it { response.should redirect_to user_path }
   end
 
   describe "new message" do
@@ -92,7 +92,7 @@ describe TweetsController do
         Tweet.stub(:find).with("49"){ mock_tweet(:user => @u) }
         get :new_message, :id => "49"
       end
-      it { response.should redirect_to @u }
+      it { response.should redirect_to user_path }
       it { flash[:notice].should == "自分は誘えません"}
     end
   end
@@ -111,7 +111,7 @@ describe TweetsController do
         Tweet.stub(:find).with("37"){ mock_tweet(:user => @u) }
         post :create_message, :id => "37"
       end
-      it { response.should redirect_to @u }
+      it { response.should redirect_to user_path }
       it { flash[:notice].should == "自分は誘えません"}
     end
 
@@ -119,7 +119,7 @@ describe TweetsController do
       before do
         post :create_message, :id => "49", :message=> @string * 6
       end
-      it { response.should redirect_to @u }
+      it { response.should redirect_to user_path }
       it { flash[:notice].should == "声をかけました"}
     end
 

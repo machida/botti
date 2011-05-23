@@ -23,5 +23,7 @@ $(document).ready( function() {
       } );
     });
 
-  $.getJSON( "/user" )
+  $.getJSON( "/user/friend_tweets.js", function(data){
+    console.log(data);
+  } );
 });
