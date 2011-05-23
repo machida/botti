@@ -22,6 +22,7 @@ $(document).ready( function() {
           var str = pos.toString();
           $( "#tweet_ll" ).val( str.substr( 1, str.length-2 ) );
           $( "#new_tweet" ).submit();
+          $( "#tweet_content" ).val("");
         });
         return false;
       }
@@ -36,6 +37,7 @@ $(document).ready( function() {
           }
         }
       } );
+      update();
     });
 
   update(); // Initial update
