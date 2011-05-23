@@ -15,7 +15,8 @@ class TweetsController < ApplicationController
       @tweet.save!
       notice = "投稿しました。"
     rescue Geokit::Geocoders::GeocodeError, ActiveRecord::RecordInvalid
-      alert = "入力内容を確認してください。(位置情報は有効になっていますか?)"
+      respond_with_alert("入力内容を確認してください。(位置情報は有効になっていますか?)")
+      return
     end
 
     if params[:tweet][:ontwitter] == "1"
@@ -23,8 +24,9 @@ class TweetsController < ApplicationController
         config_twitter(current_user.authentications.find_by_provider("twitter"))
         Twitter.update(@tweet.content + ENV['TWITTER_SUFFIX'])
       rescue Twitter::Forbidden, Twitter::Unauthorized
-        alert = "Twitter への投稿に失敗しました。" +
+        respond_with_alert notice + "Twitter への投稿に失敗しました。" +
           "正しいアカウントを登録していますか? おなじ内容の投稿をくりかえしていませんか?"
+        return
       end
     end
     respond_to do |format|
@@ -41,35 +43,35 @@ class TweetsController < ApplicationController
     begin
       @tweet = Tweet.find(params[:id])
       if !current_user.friends.include?(@tweet.user)
-        ActiveRecord::RecordNotFound
+        raise ActiveRecord::RecordNotFound
       end
     rescue ActiveRecord::RecordNotFound
-      alert = "その投稿はありません"
+      respond_with_alert("その投稿はありません")
+      return
     end
     respond_to do |format|
-      if alert
-        format.html { redirect_to user_path, :alert => alert }
-        format.js   { render :json => { :alert => alert },
-          :content_type => 'text/json' }
-      else
-        format.html
-        format.js { render :template => "tweets/_message_form",
-          :layout => false, :content_type => 'text/html'}
-      end
+      format.html
+      format.js { render :template => "tweets/_message_form",
+        :layout => false, :content_type => 'text/html'}
     end
   end
 
   def create_message
-    @tweet = Tweet.find(params[:id])
-
     # user check
-    if @tweet.user == current_user
-      alert = "自分は誘えません"
+    begin
+      @tweet = Tweet.find(params[:id])
+      if !current_user.friends.include?(@tweet.user)
+        raise ActiveRecord::RecordNotFound
+      end
+    rescue ActiveRecord::RecordNotFound
+      respond_with_alert("その投稿はありません")
+      return
     end
 
     # content check
     if params[:message].blank? || params[:message].jsize >= 100
-      alert = "入力内容を確認してください。(入力されていますか?長すぎませんか?)"
+      respond_with_alert("入力内容を確認してください。(入力されていますか?長すぎませんか?)", false)
+      return
     end
 
     # send DM / Mention
@@ -83,20 +85,35 @@ class TweetsController < ApplicationController
                                params[:message] + ENV['MESSAGE_SUFFIX'])
       end
     rescue Twitter::Forbidden, Twitter::Unauthorized
-      alert = "投稿に失敗しました"
+      respond_with_alert("投稿に失敗しました", false)
+      return
     end
 
     respond_to do |format|
-      if alert
-        format.html { render :template => "tweets/new_message" }
+      notice = "声をかけました"
+      format.html { redirect_to user_path, :notice => notice }
+      format.js   { render :json => {:notice => notice },
+        :content_type => "text/json" }
+    end
+  end
+  private
+  def respond_with_alert(alert, redirect = true)
+    if alert
+      respond_to do |format|
+        format.html do
+          flash[:alert] = alert
+          if redirect
+            redirect_to user_path, :alert => alert
+          else
+            render :action => "new_message"
+          end
+        end
         format.js   { render :json => {:alert => alert},
           :content_type => "text/json" }
-      else
-        notice = "声をかけました"
-        format.html { redirect_to user_path, :notice => notice }
-        format.js   { render :json => {:notice => notice },
-          :content_type => "text/json" }
       end
+      return true
+    else
+      return false
     end
   end
 end

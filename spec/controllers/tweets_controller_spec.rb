@@ -12,17 +12,6 @@ describe TweetsController do
   end
 
   context "when the post is invalid" do
-    context "when the query is send not from a form" do
-      before do
-        Tweet.stub(:new).with({"ontwitter" => '0'}){
-          mock_model(Tweet, {:save! => true, :set_location => true})
-        }
-        post :create, :tweet=>{:ontwitter => '0'}
-      end
-      it { response.should redirect_to root_path }
-      it { flash[:alert].should contain "不正な投稿" }
-    end
-
     context "when the model is invalid" do
       before do
         Tweet.stub(:new).with({"user_id" => @u.id}){
@@ -64,7 +53,7 @@ describe TweetsController do
       post :create, :tweet=>{:user_id=>@u.id, :ontwitter=>"1",
         :content => "pseudo content"}
     end
-    it { flash[:notice].should contain "投稿しました。" }
+    it { flash[:alert].should contain "投稿しました。" }
     it { flash[:alert].should contain "おなじ内容の投稿をくりかえしていませんか?"}
     it { response.should redirect_to user_path }
   end
@@ -81,7 +70,7 @@ describe TweetsController do
       Tweet.any_instance.stubs(:set_location).returns(true)
       post :create, :tweet=>{:user_id=>@u.id, :ontwitter=>"0"}
     end
-    it { flash[:notice].should contain "投稿しました。" }
+    it { flash[:notice].should == "投稿しました。" }
     it { flash[:alert].should be_nil}
     it { response.should redirect_to user_path }
   end
@@ -93,16 +82,19 @@ describe TweetsController do
         get :new_message, :id => "49"
       end
       it { response.should redirect_to user_path }
-      it { flash[:notice].should == "自分は誘えません"}
+      it { flash[:alert].should == "その投稿はありません"}
     end
   end
 
   describe "create message" do
     before do
       Twitter.stub(:direct_message_create).and_return true
+      @owner = User.make()
       Tweet.stub(:find).with("49"){
-        mock_tweet(:user => User.make, :content => "dummy")
+        mock_tweet(:user => @owner, :content => "dummy")
       }
+      @u.friends << @owner
+      @u.save!
       @string = "あいうえおあいうえお" #10
     end
 
@@ -112,7 +104,7 @@ describe TweetsController do
         post :create_message, :id => "37"
       end
       it { response.should redirect_to user_path }
-      it { flash[:notice].should == "自分は誘えません"}
+      it { flash[:alert].should == "その投稿はありません"}
     end
 
     context "when the message is a little bit long" do
