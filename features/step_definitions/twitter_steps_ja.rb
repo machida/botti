@@ -2,8 +2,6 @@
 require File.expand_path(File.join(File.dirname(__FILE__), "..", "support", "paths"))
 require File.expand_path(File.join(File.dirname(__FILE__), "..", "support", "selectors"))
 
-@last_post_text = ""
-
 def config_twitter
   Twitter.configure do |config|
     config.consumer_key = ENV['CONSUMER_KEY']
@@ -47,8 +45,8 @@ end
 もし /^"([^"]*)"に twitter 用字句生成/ do |form| #"
   case form
   when "つぶやき"
-    @last_post_text = "cucumber をもちいたテスト投稿#{Time.now}"
-    もし %{"内容"に"#{@last_post_text}"と入力する}
+    @post_text = "cucumber をもちいたテスト投稿#{Time.now}"
+    もし %{"内容"に"#{@post_text}"と入力する}
     set_hidden_field "tweet_ll", :to=>"35.647401,139.716911"
   when "メッセージ"
     @message_text = "いくいく #{Time.now}"
@@ -61,7 +59,7 @@ end
 ならば /^"([^"]*)"に投稿されていること$/ do |service| #"
   if service  == "twitter"
     config_twitter
-    Twitter.home_timeline[0].text.should be_include(@last_post_text)
+    Twitter.home_timeline[0].text.should be_include(@post_text)
     Twitter.home_timeline[0].text.should be_include(ENV['TWITTER_SUFFIX'])
   end
 end
@@ -69,7 +67,7 @@ end
 ならば /^"([^"]*)"に投稿されていないこと$/ do |service| #"
   if service  == "twitter"
     config_twitter
-    Twitter.home_timeline[0].text.should_not be_include(@last_post_text)
+    Twitter.home_timeline[0].text.should_not be_include(@post_text)
   end
 end
 
