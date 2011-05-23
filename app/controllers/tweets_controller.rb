@@ -42,18 +42,25 @@ class TweetsController < ApplicationController
   end
 
   def new_message
-    @tweet = Tweet.find(params[:id])
     # user check
-    if @tweet.user == current_user
-      respond_to do |format|
-        format.html { redirect_to user_path, :alert => "自分は誘えません" }
-        format.js   { render :json => { :alert => "自分は誘えません" }, :content_type => 'text/json' }
+    begin
+      @tweet = Tweet.find(params[:id])
+      if !current_user.friends.include?(@tweet.user)
+        ActiveRecord::RecordNotFound
       end
-      return
+    rescue ActiveRecord::RecordNotFound
+      alert = "その投稿はありません"
     end
     respond_to do |format|
-      format.html
-      format.js { render :template => "tweets/_message_form", :layout => false, :content_type => 'text/html'}
+      if alert
+        format.html { redirect_to user_path, :alert => alert }
+        format.js   { render :json => { :alert => alert },
+          :content_type => 'text/json' }
+      else
+        format.html
+        format.js { render :template => "tweets/_message_form",
+          :layout => false, :content_type => 'text/html'}
+      end
     end
   end
 
