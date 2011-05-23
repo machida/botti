@@ -13,7 +13,7 @@ var googlemap_controller = {
 
   addFriend : function(info){
     var url = "/tweets/" + info.id + "/message",
-        link = "<a href=\""+url+"\">DM</a>",
+        link = myname !== info.user.name ? "<a href=\""+url+"\">DM</a>" : "",
         message = [info.user.name, ":", info.content, link, "("+info.time+")"].join(" "),
         iw = new google.maps.InfoWindow({content: message}),
         marker = new google.maps.Marker({

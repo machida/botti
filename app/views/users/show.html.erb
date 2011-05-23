@@ -1,5 +1,6 @@
 <% title "マイページ" %>
 <%= javascript_include_tag "tweets" %>
+<%= javascript_tag "myname = \"#{current_user.nickname}\"" %>
 <div id="image_wrapper" class="left">
 <%= image_tag( current_user.image_url, :size=>"48x48", :alt=>"User Icon" ) %>
 </div>
