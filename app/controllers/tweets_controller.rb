@@ -46,22 +46,30 @@ class TweetsController < ApplicationController
 
   def create_message
     @tweet = Tweet.find(params[:id])
+
     # user check
     if @tweet.user == current_user
       redirect_to current_user, :notice => "自分は誘えません"
       return
     end
+
     # content check
     if params[:message].blank? || params[:message].jsize >= 100
       flash[:alert] = "入力内容を確認してください。(入力されていますか?長すぎませんか?)"
       render :template => "tweets/new_message"
       return
     end
-    # send DM
+
+    # send DM / Mention
     begin
       config_twitter(current_user.authentications.find_by_provider("twitter"))
-      Twitter.direct_message_create(@tweet.user.authentications.first.uid,
-                             params[:message] + ENV['MESSAGE_SUFFIX'])
+      if params[:method] == "Mention"
+        Twitter.update("@" + @tweet.user.nickname + " " +
+                params[:message] + ENV['TWITTER_SUFFIX'])
+      else
+        Twitter.direct_message_create(@tweet.user.authentications.first.uid,
+                               params[:message] + ENV['MESSAGE_SUFFIX'])
+      end
       redirect_to current_user, :notice => "声をかけました"
     rescue Twitter::Forbidden, Twitter::Unauthorized
       flash[:alert] = "投稿に失敗しました"

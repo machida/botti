@@ -49,8 +49,8 @@ end
     もし %{"内容"に"#{@post_text}"と入力する}
     set_hidden_field "tweet_ll", :to=>"35.647401,139.716911"
   when "メッセージ"
-    @message_text = "いくいく #{Time.now}"
-    もし %{"message"に"#{@message_text}"と入力する}
+    @post_text = "いくいく #{Time.now}"
+    もし %{"message"に"#{@post_text}"と入力する}
   else
     pending
   end
@@ -82,11 +82,11 @@ end
 ならば /DMが送信されていること/ do
   config_twitter
   dm = Twitter.direct_messages_sent(:count => 1)[0]
-  dm.text.should be_include(@message_text)
+  dm.text.should be_include(@post_text)
 end
 
 ならば /DMが送信されていないこと/ do
   config_twitter
   dm = Twitter.direct_messages_sent(:count => 1)[0]
-  dm.text.should be_include(@message_text)
+  dm.text.should_not be_include(@post_text)
 end
