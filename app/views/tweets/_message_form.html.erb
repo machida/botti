@@ -7,7 +7,7 @@
   <%= @tweet.content %>
 </div>
 </div>
-<%= form_tag message_tweet_path(@tweet) do -%>
+<%= form_tag message_tweet_path(@tweet), :remote => true, :id => "message_form" do -%>
   <div id="new_message_container" class="container clear">
     <%= text_field_tag "message", params['message'] || "ご一緒させてください", :size=>50 %>(100字以内)<br />
     <%= radio_button_tag :method, "DM", true %><%= label_tag "method_DM", "DM" %>

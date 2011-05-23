@@ -15,12 +15,9 @@ function update(){
 
 function displayError(data) {
   $.each(["notice", "alert"], function(idx, attr) {
+    $("." + attr).detach();
     if ( data[attr] ) {
-      if ( $("." + attr).length > 0 ) {
-        $("." + attr).text( data[attr] );
-      } else {
-        $("#header").after('<p class="'+attr+'">'+data[attr]+'</p>');
-      }
+      $("#header").after('<p class="'+attr+'">'+data[attr]+'</p>');
     }
   } );
 }
@@ -43,10 +40,18 @@ $(document).ready( function() {
       displayError(data);
       update();
     });
+
   $( "a[data-remote]" )
     .live( "ajax:success", function(ev, data, status, xhr){
       if (typeof data === "string") {
         $("#message").html(data);
+        $( "#message_form" )
+          .bind( "ajax:success", function(ev, data, status, xhr) {
+            if ( !data.alert ) { // success
+              $( "#message" ).html("");
+            }
+            displayError(data);
+          });
       } else { // error
         displayError(data);
       }
