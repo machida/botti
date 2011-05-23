@@ -18,12 +18,11 @@ class Tweet < ActiveRecord::Base
   end
 
   def as_json(options = {})
-    p "called"
     options[:dm] ||= true
     {
       :content => content,
       :time => time,
-      :dm => options[:dm] ? id : "",
+      :id => options[:dm] ? id : "",
       :location => {
         :address => location.address,
         :lat => location.lat,
