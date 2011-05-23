@@ -23,11 +23,22 @@ $(document).ready( function() {
       } );
     });
 
-  $.getJSON( "/user/friend_tweets.js", function(data){
+  $.getJSON(, function(data){
     var max = data.length, i = 0;
-    console.log(data);
+    console.dir(data);
+    console.log(i, max);
     for( i = 0; i < max; i ++ ){
+      console.log(data[i]);
       googlemap_controller.addFriend(data[i]);
     }
-  } );
+  });
+  $.PeriodicalUpdater(
+    {url:"/user/friend_tweets.js",
+     type:"html",
+     minTimeout:1000,
+     maxTimeout:120000,
+     multiplier: 2},
+    function(data){
+      googlemap_controller.
+    });
 });

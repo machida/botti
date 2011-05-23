@@ -5,23 +5,29 @@ var googlemap_controller = {
   mypos : null,
   friends: [],
   map: null,
+
   setMyPosition : function(pos){
     this.mypos = pos;
     this.map.setCenter(pos);
   },
-  addFriend : function(friend_info){
-    info.message = [info.name, ":", info.content, info.link, "("+info.time+")"].join(" ");
-    var iw = new google.maps.InfoWindow({content: info.message}),
+
+  addFriend : function(info){
+    var url = "/tweets/" + info.id + "/message",
+        link = "<a href=\""+url+"\">DM</a>",
+        message = [info.user.name, ":", info.content, link, "("+info.time+")"].join(" "),
+        iw = new google.maps.InfoWindow({content: message}),
         marker = new google.maps.Marker({
-          position: new google.maps.LatLng(info.lat,info.lng),
+          position: new google.maps.LatLng(info.location.lat,info.location.lng),
           map: this.map,
-          title: info.name,
-          icon: info.image_url
+          title: info.user.name,
+          icon: info.user.image_url
         });
+    console.log(url, link, message, iw, marker);
     google.maps.event.addListener(marker, "click", function(){
       iw.open(this.map, marker);
     });
   },
+
   initialize : function() {
     var options = {
       zoom: 14,
