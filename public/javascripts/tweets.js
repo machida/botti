@@ -23,22 +23,20 @@ $(document).ready( function() {
       } );
     });
 
-  $.getJSON(, function(data){
-    var max = data.length, i = 0;
-    console.dir(data);
-    console.log(i, max);
-    for( i = 0; i < max; i ++ ){
-      console.log(data[i]);
-      googlemap_controller.addFriend(data[i]);
-    }
-  });
-  $.PeriodicalUpdater(
-    {url:"/user/friend_tweets.js",
-     type:"html",
-     minTimeout:1000,
-     maxTimeout:120000,
-     multiplier: 2},
-    function(data){
-      googlemap_controller.
+  update(); // Initial update
+  var int_id = setInterval( update, 60000 );
+  setTimeout( googlemap_controller.clearMarkers, 10000 );
+
+  function update(){
+    $.getJSON("/user/friend_tweets.js", function(data){
+      var max = data.length, i = 0;
+
+      // 既存のアイテムを削除
+
+      for( i = 0; i < max; i ++ ){
+        googlemap_controller.addFriend(data[i]);
+      }
     });
+  }
+  
 });

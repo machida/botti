@@ -7,6 +7,7 @@
 <div id="map" class="clear">
   <%= render :partial=>"map" %>
 </div>
+<%= button_to_function "更新", "update()" %>
 <div id="my_status">
 <h3>最近のぼっち飯</h3>
 <% if @tweets.count>0 -%>

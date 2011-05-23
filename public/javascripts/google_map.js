@@ -22,10 +22,13 @@ var googlemap_controller = {
           title: info.user.name,
           icon: info.user.image_url
         });
-    console.log(url, link, message, iw, marker);
     google.maps.event.addListener(marker, "click", function(){
       iw.open(this.map, marker);
     });
+  },
+
+  clearMarkers : function() {
+    console.log("clearing");
   },
 
   initialize : function() {
