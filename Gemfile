@@ -26,6 +26,12 @@ group :development, :test do
   gem 'guard-rspec'
   gem 'guard-cucumber'
 end
+
+group :development do
+  gem 'hirb'
+  gem 'hirb-unicode'
+end
+
 # Deploy with Capistrano
 # gem 'capistrano'
 gem "mocha", :group => :test
