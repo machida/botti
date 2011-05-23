@@ -45,10 +45,16 @@ class TweetsController < ApplicationController
     @tweet = Tweet.find(params[:id])
     # user check
     if @tweet.user == current_user
-      redirect_to user_path, :notice => "自分は誘えません"
+      respond_to do |format|
+        format.html { redirect_to user_path, :alert => "自分は誘えません" }
+        format.js   { render :json => { :alert => "自分は誘えません" }, :content_type => 'text/json' }
+      end
       return
     end
-    # create string
+    respond_to do |format|
+      format.html
+      format.js { render :template => "tweets/_message_form", :layout => false, :content_type => 'text/html'}
+    end
   end
 
   def create_message

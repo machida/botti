@@ -53,3 +53,7 @@ span.name{
     font-size: 120%;
     padding: 10px 0 0 10px;
 }
+
+div#message{
+    padding: 10px 0;
+}

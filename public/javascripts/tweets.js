@@ -13,6 +13,18 @@ function update(){
   });
 }
 
+function displayError(data) {
+  $.each(["notice", "alert"], function(idx, attr) {
+    if ( data[attr] ) {
+      if ( $("." + attr).length > 0 ) {
+        $("." + attr).text( data[attr] );
+      } else {
+        $("#header").after('<p class="'+attr+'">'+data[attr]+'</p>');
+      }
+    }
+  } );
+}
+
 $(document).ready( function() {
   $( "#new_tweet" ).bind("ajax:before", function() {
       if ( $( "#tweet_ll" ).val() == "" ) {
@@ -28,16 +40,17 @@ $(document).ready( function() {
       }
     })
     .bind( "ajax:success", function(ev, data, status, xhr) {
-      $.each(["notice", "alert"], function(idx, attr) {
-        if ( data[attr] ) {
-          if ( $("." + attr).length > 0 ) {
-            $("." + attr).text( data[attr] );
-          } else {
-            $("#header").after('<p class="'+attr+'">'+data[attr]+'</p>');
-          }
-        }
-      } );
+      displayError(data);
       update();
+    });
+  $( "a[data-remote]" )
+    .live( "ajax:success", function(ev, data, status, xhr){
+      if (typeof data === "string") {
+        $("#message").html(data);
+      } else { // error
+        displayError(data);
+      }
+      return false;
     });
 
   update(); // Initial update
