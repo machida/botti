@@ -1,13 +1,16 @@
 Botti::Application.routes.draw do
-  get "users/show"
-
   resources :tweets, :only=>[:create] do
     member do
       post :message, :action => :create_message
       get :message, :action => :new_message
     end
   end
-  resources :users, :only=>[:show]
+
+  resource :user, :only=>[:show] do
+    member do
+      get :friend_tweets
+    end
+  end
 
   match '/auth/:provider/callback' => "authentications#create"
   match '/auth/failure' => "welcome#failure"

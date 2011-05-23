@@ -8,11 +8,5 @@ describe UsersController do
       get 'show', :id=>@u.id
       response.should be_success
     end
-
-    it "should redirect when he is not the owner" do
-      get 'show', :id=>User.make.id
-      response.should be_redirect
-      response.should redirect_to @u
-    end
   end
 end
