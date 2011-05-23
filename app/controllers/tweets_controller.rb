@@ -27,17 +27,12 @@ class TweetsController < ApplicationController
           "正しいアカウントを登録していますか? おなじ内容の投稿をくりかえしていませんか?"
       end
     end
-    if params[:tweet] && params[:tweet][:user_id]
-      respond_to do |format|
-        format.html { redirect_to user_path, :notice=>notice, :alert => alert }
-        format.js do
-          render :json => {:alert => alert, :notice => notice,
-            :messages => ""}, :content_type => 'text/json'
-        end
+    respond_to do |format|
+      format.html { redirect_to user_path, :notice => notice, :alert => alert }
+      format.js do
+        render :json => {:alert => alert, :notice => notice,
+          :messages => ""}, :content_type => 'text/json'
       end
-    else
-      flash[:alert] = "不正な投稿"
-      redirect_to root_path
     end
   end
 
