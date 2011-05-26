@@ -1,17 +1,9 @@
 # -*- coding: utf-8 -*-
 class UsersController < ApplicationController
   before_filter :authenticate_user!
+
   def show
-    @js_query = ""
-    @tweets = current_user.tweets.order("updated_at DESC")
     @tweet = Tweet.new( :user_id => current_user.id, :content => "ぼっち飯なう" )
-    # @friend_tweets = get_friend_tweets(@user)
-    # if @user.tweets.count > 0
-    #   @friend_tweets << @user.tweets.order("updated_at DESC").first
-    # end
-    # @friend_tweets.reverse.each do |t|
-    #   @js_query += generate_json(t.user, t)
-    # end
   end
 
   def friend_tweets
@@ -24,6 +16,7 @@ class UsersController < ApplicationController
     end
     @ft.sort_by{|obj| obj.updated_at}
 
+    # include myself
     if current_user.tweets.count > 0
       @ft << current_user.tweets.order("updated_at DESC").first
     end
@@ -33,6 +26,4 @@ class UsersController < ApplicationController
       format.js   { render :json => @ft, :content_type => "text/json" }
     end
   end
-
-  private
 end
