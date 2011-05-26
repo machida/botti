@@ -8,7 +8,7 @@ function update(){
     // 既存のアイテムを削除
     googlemap_controller.clearMarkers();
     while (i--){
-      googlemap_controller.addFriend(data[i]);
+      googlemap_controller.addFriend(data[data.length - i]);
     }
   });
 }
