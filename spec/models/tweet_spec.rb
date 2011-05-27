@@ -37,4 +37,32 @@ describe Tweet do
     end
     it { Tweet.all.count.should == 2 }
   end
+
+  describe "reply" do
+    before do
+      # @u = mock_model(User,
+      #           :nickname => "Test_Name",
+      #           :authentications => mock_model("PseudoArray", :find_by_provider => mock_model(Authentication, :uid => 123456, :token=> "tekitou", :secret => "tekitou"))
+      #           )
+      @u = User.make
+      @t = Tweet.make
+    end
+    context "when update fails" do
+      before do
+        Twitter.stub(:direct_message_create).and_return true
+        Twitter.stub(:update).and_raise(Twitter::Unauthorized)
+      end
+      it { @t.reply(@u, "Mention", "message").should == false }
+      it { @t.reply(@u, "DM", "message").should == true }
+    end
+
+    context "when DM fails" do
+      before do
+        Twitter.stub(:update).and_return true
+        Twitter.stub(:direct_message_create).and_raise(Twitter::Unauthorized)
+      end
+      it { @t.reply(@u, "Mention", "message").should == true }
+      it { @t.reply(@u, "DM", "message").should == false }
+    end
+  end
 end

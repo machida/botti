@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 class Tweet < ActiveRecord::Base
+  include ApplicationHelper # config_twitter
+
   has_one :location, :dependent=>:delete
   belongs_to :user
   attr_accessor :ll, :ontwitter
@@ -31,5 +33,17 @@ class Tweet < ActiveRecord::Base
       :user => {:name => user.nickname, :image_url => user.image_url}
     }
   end
-  #   %Q% googlemap_controller.addFriend(#{params.to_json});%
+
+  def reply(from, method, message)
+    begin
+      config_twitter(from.authentications.find_by_provider("twitter"))
+      if method == "Mention"
+        Twitter.update("@" + user.nickname + " " + message)
+      else
+        Twitter.direct_message_create(user.authentications.first.uid, message)
+      end
+    rescue Twitter::Forbidden, Twitter::Unauthorized
+      return false
+    end
+  end
 end

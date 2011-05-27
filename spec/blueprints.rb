@@ -11,7 +11,7 @@ Sham.define do
   email { Faker::Internet.email }
   url { "http://www.example.com/" + Faker::Internet.user_name + ".png" }
   content { Faker::Lorem.sentence }
-  lat { rand(100000) / 1000.0 }
+  geo { rand(100000) / 1000.0 }
 end
 
 Authentication.blueprint do
@@ -33,13 +33,12 @@ User.blueprint(:login) do
   nickname
 end
 
-# Location.blueprint do
-#   lat { Sham.geo }
-#   lng { Sham.geo }
-# end
+Location.blueprint do
+  lat { Sham.geo }
+  lng { Sham.geo }
+end
 
-# Tweet.blueprint do
-#   user { User.make }
-#   content
-#   location { Location.make }
-# end
+Tweet.blueprint do
+  user { User.make }
+  content
+end

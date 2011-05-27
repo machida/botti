@@ -4,6 +4,8 @@ class TweetsController < ApplicationController
   include ApplicationHelper
 
   before_filter :authenticate_user!
+  before_filter :friend?, :only => [:new_message, :create_message]
+
   def new
     @tweet = Tweet.new
   end
@@ -39,16 +41,6 @@ class TweetsController < ApplicationController
   end
 
   def new_message
-    # user check
-    begin
-      @tweet = Tweet.find(params[:id])
-      if !current_user.friends.include?(@tweet.user)
-        raise ActiveRecord::RecordNotFound
-      end
-    rescue ActiveRecord::RecordNotFound
-      respond_with_alert("その投稿はありません")
-      return
-    end
     respond_to do |format|
       format.html
       format.js { render :template => "tweets/_message_form",
@@ -57,16 +49,6 @@ class TweetsController < ApplicationController
   end
 
   def create_message
-    # user check
-    begin
-      @tweet = Tweet.find(params[:id])
-      if !current_user.friends.include?(@tweet.user)
-        raise ActiveRecord::RecordNotFound
-      end
-    rescue ActiveRecord::RecordNotFound
-      respond_with_alert("その投稿はありません")
-      return
-    end
 
     # content check
     if params[:message].blank? || params[:message].jsize >= 100
@@ -75,28 +57,23 @@ class TweetsController < ApplicationController
     end
 
     # send DM / Mention
-    begin
-      config_twitter(current_user.authentications.find_by_provider("twitter"))
-      if params[:method] == "Mention"
-        Twitter.update("@" + @tweet.user.nickname + " " +
-                params[:message] + ENV['TWITTER_SUFFIX'])
-      else
-        Twitter.direct_message_create(@tweet.user.authentications.first.uid,
-                               params[:message] + ENV['MESSAGE_SUFFIX'])
+    if tweet.reply(current_user, params[:method], params[:message] + ENV['TWITTER_SUFFIX'])
+      respond_to do |format|
+        notice = "声をかけました"
+        format.html { redirect_to user_path, :notice => notice }
+        format.js   { render :json => {:notice => notice },
+          :content_type => "text/json" }
       end
-    rescue Twitter::Forbidden, Twitter::Unauthorized
-      respond_with_alert("投稿に失敗しました", false)
-      return
-    end
-
-    respond_to do |format|
-      notice = "声をかけました"
-      format.html { redirect_to user_path, :notice => notice }
-      format.js   { render :json => {:notice => notice },
-        :content_type => "text/json" }
+    else
+      respond_with_alert("投稿に失敗しました", true)
     end
   end
+
   private
+  def tweet
+    @tweet ||= Tweet.find(params[:id])
+  end
+
   def respond_with_alert(alert, redirect = true)
     if alert
       respond_to do |format|
@@ -113,6 +90,18 @@ class TweetsController < ApplicationController
       end
       return true
     else
+      return false
+    end
+  end
+
+  def friend?
+    # user check
+    begin
+      if !current_user.friends.include?( tweet.user )
+        raise ActiveRecord::RecordNotFound
+      end
+    rescue ActiveRecord::RecordNotFound
+      respond_with_alert("その投稿はありません")
       return false
     end
   end
