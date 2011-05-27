@@ -13,6 +13,16 @@ describe TweetsController do
 
   describe "POST create" do
     context "when the post is invalid" do
+      context "when the set_location fails" do
+        before do
+          Tweet.stub(:new).with({"user_id" => @u.id}){ mock_tweet() }
+          mock_tweet.stub(:set_location).and_raise(Geokit::Geocoders::GeocodeError)
+          post :create, :tweet=>{:user_id =>@u.id}
+        end
+        it { response.should redirect_to user_path}
+        it { flash[:alert].should contain "入力内容を確認してください。" }
+      end
+
       context "when the model is invalid" do
         before do
           Tweet.stub(:new).with({"user_id" => @u.id}){ mock_tweet }
@@ -23,19 +33,9 @@ describe TweetsController do
         it { response.should redirect_to user_path}
         it { flash[:alert].should contain "入力内容を確認してください。" }
       end
-
-      context "when the set_location fails" do
-        before do
-          Tweet.stub(:new).with({"user_id" => @u.id}){ mock_tweet() }
-          mock_tweet.stub(:set_location).and_raise(Geokit::Geocoders::GeocodeError)
-          post :create, :tweet=>{:user_id =>@u.id}
-        end
-        it { response.should redirect_to user_path}
-        it { flash[:alert].should contain "入力内容を確認してください。" }
-      end
     end
 
-    context "when the post is not accepted by Twitter" do
+    context "when valid" do
       before do
         @u.authentications.build(:provider=>"twitter",
                            :uid=>'123456',
@@ -50,34 +50,26 @@ describe TweetsController do
                :content => "pseudo content",
                :user_id=>@u.id)
         }
-        Twitter.should_receive(:update).and_raise(Twitter::Forbidden)
-        post :create, :tweet=>{:user_id=>@u.id, :ontwitter=>"1",
-          :content => "pseudo content"}
       end
-      it { flash[:alert].should contain "投稿しました。" }
-      it { flash[:alert].should contain "おなじ内容の投稿をくりかえしていませんか?"}
-      it { response.should redirect_to user_path }
-    end
+      context "when the post is not accepted by Twitter" do
+        before do
+          Twitter.should_receive(:update).and_raise(Twitter::Forbidden)
+          post :create, :tweet=>{:user_id=>@u.id, :ontwitter=>"1",
+            :content => "pseudo content"}
+        end
+        it { flash[:alert].should contain "投稿しました。" }
+        it { flash[:alert].should contain "おなじ内容の投稿をくりかえしていませんか?"}
+        it { response.should redirect_to user_path }
+      end
 
-    context "when not tweeting on twitter" do
-      before do
-        @u.authentications.build(:provider=>"twitter",
-                           :uid=>'123456',
-                           :token=>ENV['USER_TOKEN'],
-                           :secret=>ENV['USER_SECRET'])
-        @u.save!
-        User.find(@u.id).authentications.find_by_provider("twitter").
-          should_not be_nil ##gautlet
-        Tweet.stub(:new){
-          mock_tweet(:save! => true,
-               :set_location => true,
-               :user_id=>@u.id)
-        }
-        post :create, :tweet=>{:user_id=>@u.id, :ontwitter=>"0"}
+      context "when not tweeting on twitter" do
+        before do
+          post :create, :tweet=>{:user_id=>@u.id, :ontwitter=>"0"}
+        end
+        it { flash[:notice].should == "投稿しました。" }
+        it { flash[:alert].should be_nil}
+        it { response.should redirect_to user_path }
       end
-      it { flash[:notice].should == "投稿しました。" }
-      it { flash[:alert].should be_nil}
-      it { response.should redirect_to user_path }
     end
   end
 
@@ -109,7 +101,7 @@ describe TweetsController do
         Tweet.stub(:find).with("49"){ mock_tweet }
         @u.friends << @owner
         @u.save!
-        @string = "あいうえおあいうえお" #10
+        @string = "あいうえおあいうえお" # 10 letters
       end
 
       context "when the message is a little bit long" do

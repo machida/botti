@@ -40,10 +40,6 @@ describe Tweet do
 
   describe "reply" do
     before do
-      # @u = mock_model(User,
-      #           :nickname => "Test_Name",
-      #           :authentications => mock_model("PseudoArray", :find_by_provider => mock_model(Authentication, :uid => 123456, :token=> "tekitou", :secret => "tekitou"))
-      #           )
       @u = User.make
       @t = Tweet.make
     end
