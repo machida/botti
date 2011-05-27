@@ -2,6 +2,7 @@
 module ApplicationHelper
   def config_twitter(auth)
     if auth
+      # this succeeds with any params (even if wrong)
       Twitter.configure do |config|
         config.consumer_key = ENV['CONSUMER_KEY']
         config.consumer_secret = ENV['CONSUMER_SECRET']
