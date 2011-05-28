@@ -15,6 +15,8 @@ module NavigationHelpers
       new_twitter_login_path
     when /ユーザ/
       user_path(User.find_by_nickname(TEST_OAINFO['user_info']['nickname']))
+    when /DM/
+      message_tweet_path(2)
     else
       begin
         page_name =~ /the (.*) page/
