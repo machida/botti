@@ -5,3 +5,5 @@ tmp/
 coverage/
 config/database.yml
 auth_info.rb
+vendor/bundle
+*.log
