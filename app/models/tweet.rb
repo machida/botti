@@ -4,7 +4,7 @@ class Tweet < ActiveRecord::Base
 
   has_one :location, :dependent=>:delete
   belongs_to :user
-  attr_accessor :ll, :ontwitter
+  attr_accessor :ll, :ontwitter, :myself
   attr_accessible :content, :user_id, :ll
   validates_presence_of :content, :user_id
   validates_length_of :content, :maximum => 140
@@ -25,6 +25,7 @@ class Tweet < ActiveRecord::Base
       :content => content,
       :time => time,
       :id => options[:dm] ? id : "",
+      :myself => myself,
       :location => {
         :address => location.address,
         :lat => location.lat,

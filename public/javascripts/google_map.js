@@ -12,10 +12,8 @@ var googlemap_controller = {
   },
 
   addFriend : function(info){
-    var url = "/tweets/" + info.id + "/message",
-        // link = myname !== info.user.name ?
-        //   '<a data-remote="true" href="'+url+'">DM</a>' : "",
-        link = '<a data-remote="true" href="'+url+'">DM</a>',
+    var link = info.myself ? "" :
+          '<a data-remote="true" href=/tweets/' + info.id + '/message">DM</a>',
         message = [info.user.name, ":", info.content, link, "("+info.time+")"].join(" "),
         iw = new google.maps.InfoWindow({content: message}),
         marker = new google.maps.Marker({
@@ -24,6 +22,7 @@ var googlemap_controller = {
           title: info.user.name,
           icon: info.user.image_url
         });
+    console.log(info.myself);
     google.maps.event.addListener(marker, "click", function(){
       iw.open(this.map, marker);
     });
