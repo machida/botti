@@ -41,4 +41,5 @@ end
 Tweet.blueprint do
   user { User.make }
   content
+  location { Location.new([10,20]) }
 end
