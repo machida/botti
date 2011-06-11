@@ -3,12 +3,12 @@
 
 function update(){
   $.getJSON("/user/friend_tweets.js", function(data){
-    var i = data.length;
+    var i = 0, length = data.length;
 
     // 既存のアイテムを削除
     googlemap_controller.clearMarkers();
-    while (i--){
-      googlemap_controller.addFriend(data[data.length - i]);
+    for (;i < length; i++) {
+      googlemap_controller.addFriend(data[i]);
     }
   });
 }
