@@ -5,11 +5,11 @@ class AuthenticationsController < ApplicationController
     oa = request.env["omniauth.auth"]
 
     # closed beta filter
-    unless ENV['RACK_ENV'] != "production"
+    unless ENV['RACK_ENV'] == "production"
       require "filter"
       unless WHITELIST.include? oa['user_info']['nickname']
         redirect_to root_path, :alert => "許可がないためログインできません。"
-        return # reject
+        return
       end
     end
 
