@@ -35,14 +35,11 @@ class Tweet < ActiveRecord::Base
     }
   end
 
-  def reply(from, method, message)
+  # DM is no longer supported
+  def reply(from, message)
     begin
       config_twitter(from.authentications.find_by_provider("twitter"))
-      if method == "Mention"
-        Twitter.update("@" + user.nickname + " " + message)
-      else
-        Twitter.direct_message_create(user.authentications.first.uid, message)
-      end
+      Twitter.update("@" + user.nickname + " " + message)
     rescue Twitter::Forbidden, Twitter::Unauthorized
       return false
     end

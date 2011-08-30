@@ -57,7 +57,7 @@ class TweetsController < ApplicationController
     end
 
     # send DM / Mention
-    if tweet.reply(current_user, params[:method], params[:message] + ENV['TWITTER_SUFFIX'])
+    if tweet.reply(current_user, params[:message] + ENV['TWITTER_SUFFIX'])
       respond_to do |format|
         notice = "声をかけました"
         format.html { redirect_to user_path, :notice => notice }
